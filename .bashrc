@@ -1,3 +1,4 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
@@ -113,4 +114,16 @@ if ! shopt -oq posix; then
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
   fi
+fi
+
+# runs a collection of bash scripts. this is analogeous to the 
+# /etc/profile.d folder but for interactive bash shells rather 
+# than login shells
+if [ -d ~/bash.d ]; then
+  for i in ~/bash.d/*.sh; do
+    if [ -r $i ]; then
+      . $i
+    fi
+  done
+  unset i
 fi
