@@ -36,11 +36,11 @@ rm -r ~/dotfiles-root/.ssh/ || true
 mkdir -p ~/dotfiles-root/.ssh && touch ~/dotfiles-root/.ssh/config
 # we need to provision the .ssh folder, just in case it doesn't exist yet
 mkdir -p ~/.ssh
-if [[ -f ~/dotfiles-rullion/.ssh/config ]]; then
-  cat ~/dotfiles-rullion/.ssh/config >> ~/dotfiles-root/.ssh/config
-fi
 if [[ -f ~/dotfiles-personal/.ssh/config ]]; then
   cat ~/dotfiles-personal/.ssh/config >> ~/dotfiles-root/.ssh/config
+fi
+if [[ -f ~/dotfiles-rullion/.ssh/config ]]; then
+  cat ~/dotfiles-rullion/.ssh/config >> ~/dotfiles-root/.ssh/config
 fi
 ln -sf ~/dotfiles-root/.ssh/config ~/.ssh/config
 # overwriting sybolic links doesn't work if they are linked to directories apparently
