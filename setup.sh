@@ -1,5 +1,7 @@
 #!/bin/bash
 
+INCLUDE_ALIASES="dotfiles-personal dotfiles-rullion"
+
 # if any original files exist then we will just move them rather than 
 # delete them
 # if the file is a symlink then it will have in all likelyhood been 
@@ -28,7 +30,7 @@ fi
 rm -r ~/dotfiles-multiplexer/built-dots/ 2>/dev/null
 mkdir -p ~/dotfiles-multiplexer/built-dots/
 touch ~/dotfiles-multiplexer/built-dots/.bash_aliases
-./build-scripts/add-bash-aliases-include.sh dotfiles-personal
+./build-scripts/.bash_aliases-includes.sh $INCLUDE_ALIASES
 
 # overwrite existing symbolic links if they exist
 ln -sf ~/dotfiles-multiplexer/.bashrc ~/.bashrc
