@@ -1,8 +1,10 @@
 #!/bin/bash
 
+multiplexer="$PWD/${0%/*}"
+
 # if no dotfile-multiplex config file exists, copy the template file
 if [[ ! -f ~/dotfiles-multiplexer.conf ]]; then
-  cp ./dotfiles-multiplexer.conf.template ~/dotfiles-multiplexer.conf
+  cp $multiplexer/dotfiles-multiplexer.conf.template ~/dotfiles-multiplexer.conf
 fi
 
 # load in the user configured include vars
@@ -38,22 +40,22 @@ fi
 rm ~/bash.d 2>/dev/null
 
 # build the 'include' dotfiles
-rm -r ~/dotfiles-multiplexer/built-dots/ 2>/dev/null
-mkdir -p ~/dotfiles-multiplexer/built-dots/.ssh
-mkdir -p ~/dotfiles-multiplexer/built-dots/bash.d
-./build-scripts/.bash_aliases-includes.sh $include_aliases
-./build-scripts/.vimrc-includes.sh $include_vimrc
-./build-scripts/.gitconfig-includes.sh $include_gitconfig
-./build-scripts/.tmux.conf-includes.sh $include_tmuxconf
-./build-scripts/.ssh-config-parts.sh $include_sshconfig
-./build-scripts/bash.d-symlinks.sh $include_bashd
-./build-scripts/profile.d-symlinks.sh $include_profiled
+rm -r $multiplexer/built-dots/ 2>/dev/null
+mkdir -p $multiplexer/built-dots/.ssh
+mkdir -p $multiplexer/built-dots/bash.d
+. $multiplexer/build-scripts/.bash_aliases-includes.sh $include_aliases
+. $multiplexer/build-scripts/.vimrc-includes.sh $include_vimrc
+. $multiplexer/build-scripts/.gitconfig-includes.sh $include_gitconfig
+. $multiplexer/build-scripts/.tmux.conf-includes.sh $include_tmuxconf
+. $multiplexer/build-scripts/.ssh-config-parts.sh $include_sshconfig
+. $multiplexer/build-scripts/bash.d-symlinks.sh $include_bashd
+. $multiplexer/build-scripts/profile.d-symlinks.sh $include_profiled
 
 # overwrite existing symbolic links if they exist
-ln -sf ~/dotfiles-multiplexer/.bashrc ~/.bashrc
-ln -sf ~/dotfiles-multiplexer/built-dots/.bash_aliases ~/.bash_aliases
-ln -sf ~/dotfiles-multiplexer/built-dots/.vimrc ~/.vimrc
-ln -sf ~/dotfiles-multiplexer/built-dots/.tmux.conf ~/.tmux.conf
-ln -sf ~/dotfiles-multiplexer/built-dots/.gitconfig ~/.gitconfig
-ln -sf ~/dotfiles-multiplexer/built-dots/.ssh/config ~/.ssh/config
-ln -s ~/dotfiles-multiplexer/built-dots/bash.d ~/bash.d
+ln -sf $multiplexer/.bashrc ~/.bashrc
+ln -sf $multiplexer/built-dots/.bash_aliases ~/.bash_aliases
+ln -sf $multiplexer/built-dots/.vimrc ~/.vimrc
+ln -sf $multiplexer/built-dots/.tmux.conf ~/.tmux.conf
+ln -sf $multiplexer/built-dots/.gitconfig ~/.gitconfig
+ln -sf $multiplexer/built-dots/.ssh/config ~/.ssh/config
+ln -s $multiplexer/built-dots/bash.d ~/bash.d
