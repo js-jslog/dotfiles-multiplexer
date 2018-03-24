@@ -1,12 +1,12 @@
 #!/bin/bash
 
-INCLUDE_ALIASES="dotfiles-personal dotfiles-rullion"
-INCLUDE_VIMRC="dotfiles-personal dotfiles-rullion"
-INCLUDE_GITCONFIG="dotfiles-personal dotfiles-rullion"
-INCLUDE_TMUXCONF="dotfiles-personal dotfiles-rullion"
-INCLUDE_SSHCONFIG="dotfiles-personal dotfiles-rullion"
-INCLUDE_BASHD="dotfiles-personal dotfiles-rullion"
-INCLUDE_PROFILED="dotfiles-personal"
+# if no dotfile-multiplex config file exists, copy the template file
+if [[ ! -f ~/dotfile-multiplex.conf ]]; then
+  cp ./dotfile-multiplex-template.conf ~/dotfile-multiplex.conf
+fi
+
+# load in the user configured include vars
+. ~/dotfile-multiplex.conf
 
 # if any original files exist then we will just move them rather than 
 # delete them
@@ -41,13 +41,13 @@ rm ~/bash.d 2>/dev/null
 rm -r ~/dotfiles-multiplexer/built-dots/ 2>/dev/null
 mkdir -p ~/dotfiles-multiplexer/built-dots/.ssh
 mkdir -p ~/dotfiles-multiplexer/built-dots/bash.d
-./build-scripts/.bash_aliases-includes.sh $INCLUDE_ALIASES
-./build-scripts/.vimrc-includes.sh $INCLUDE_VIMRC
-./build-scripts/.gitconfig-includes.sh $INCLUDE_GITCONFIG
-./build-scripts/.tmux.conf-includes.sh $INCLUDE_TMUXCONF
-./build-scripts/.ssh-config-parts.sh $INCLUDE_SSHCONFIG
-./build-scripts/bash.d-symlinks.sh $INCLUDE_BASHD
-./build-scripts/profile.d-symlinks.sh $INCLUDE_PROFILED
+./build-scripts/.bash_aliases-includes.sh $include_aliases
+./build-scripts/.vimrc-includes.sh $include_vimrc
+./build-scripts/.gitconfig-includes.sh $include_gitconfig
+./build-scripts/.tmux.conf-includes.sh $include_tmuxconf
+./build-scripts/.ssh-config-parts.sh $include_sshconfig
+./build-scripts/bash.d-symlinks.sh $include_bashd
+./build-scripts/profile.d-symlinks.sh $include_profiled
 
 # overwrite existing symbolic links if they exist
 ln -sf ~/dotfiles-multiplexer/.bashrc ~/.bashrc
