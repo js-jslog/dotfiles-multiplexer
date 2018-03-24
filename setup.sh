@@ -5,6 +5,7 @@ INCLUDE_VIMRC="dotfiles-personal dotfiles-rullion"
 INCLUDE_GITCONFIG="dotfiles-personal dotfiles-rullion"
 INCLUDE_TMUXCONF="dotfiles-personal dotfiles-rullion"
 INCLUDE_SSHCONFIG="dotfiles-personal dotfiles-rullion"
+INCLUDE_BASHD="dotfiles-personal dotfiles-rullion"
 
 # if any original files exist then we will just move them rather than 
 # delete them
@@ -35,6 +36,7 @@ fi
 # build the 'include' dotfiles
 rm -r ~/dotfiles-multiplexer/built-dots/ 2>/dev/null
 mkdir -p ~/dotfiles-multiplexer/built-dots/.ssh
+mkdir -p ~/dotfiles-multiplexer/built-dots/bash.d
 touch ~/dotfiles-multiplexer/built-dots/.bash_aliases
 touch ~/dotfiles-multiplexer/built-dots/.vimrc
 touch ~/dotfiles-multiplexer/built-dots/.gitconfig
@@ -44,6 +46,7 @@ touch ~/dotfiles-multiplexer/built-dots/.ssh/config
 ./build-scripts/.gitconfig-includes.sh $INCLUDE_GITCONFIG
 ./build-scripts/.tmux.conf-includes.sh $INCLUDE_TMUXCONF
 ./build-scripts/.ssh-config-parts.sh $INCLUDE_SSHCONFIG
+./build-scripts/bash.d-symlinks.sh $INCLUDE_BASHD
 
 # overwrite existing symbolic links if they exist
 ln -sf ~/dotfiles-multiplexer/.bashrc ~/.bashrc
@@ -55,30 +58,9 @@ ln -sf ~/dotfiles-multiplexer/built-dots/.ssh/config ~/.ssh/config
 
 # overwriting sybolic links doesn't work if they are linked to directories apparently
 # need to remove it
-rm ~/bash.d || true
-# the bash.d directory doesn't have any of it's own files, so it is excluded from the repo and
-# we need to create it during runtime
-rm -r ~/dotfiles-multiplexer/bash.d/ || true
-mkdir ~/dotfiles-multiplexer/bash.d/
-# now we can create the link
-ln -s ~/dotfiles-multiplexer/bash.d ~/bash.d
+rm ~/bash.d 2>/dev/null
+ln -s ~/dotfiles-multiplexer/built-dots/bash.d ~/bash.d
 
-# filling the bash.d folder with scripts to be run at shell initiation
-# bash files should contain exported environment variables and functions for interactive shells
-if [ -d ~/dotfiles-rullion/bash.d/ ]; then
-  for bashpath in $(find ~/dotfiles-rullion/bash.d/ \( -name '*.sh' \))
-  do
-    bashname=$(basename "${bashpath}")
-    sudo ln -sf $bashpath ~/bash.d/rullion-$bashname
-  done
-fi
-if [ -d ~/dotfiles-personal/bash.d/ ]; then
-  for bashpath in $(find ~/dotfiles-personal/bash.d/ \( -name '*.sh' \))
-  do
-    bashname=$(basename "${bashpath}")
-    sudo ln -sf $bashpath ~/bash.d/personal-$bashname
-  done
-fi
 
 # filling the profile.d folder with scripts to be run at login shell initiation
 # profile files should contain exported environment variables and functions for login shells
