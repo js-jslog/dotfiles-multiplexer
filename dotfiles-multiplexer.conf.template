@@ -1,0 +1,12 @@
+# defaults for the include vars
+# these variables determine which order the dotfile repos will be read for each 
+# type of configuration file multiplex being generated
+
+include_aliases="dotfiles"
+include_vimrc="dotfiles"
+include_gitconfig="dotfiles"
+include_tmuxconf="dotfiles"
+include_sshconfig="dotfiles"
+include_bashd="dotfiles"
+include_profiled="dotfiles"
+
