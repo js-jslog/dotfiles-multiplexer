@@ -3,6 +3,7 @@
 INCLUDE_ALIASES="dotfiles-personal dotfiles-rullion"
 INCLUDE_VIMRC="dotfiles-personal dotfiles-rullion"
 INCLUDE_GITCONFIG="dotfiles-personal dotfiles-rullion"
+INCLUDE_TMUXCONF="dotfiles-personal dotfiles-rullion"
 
 # if any original files exist then we will just move them rather than 
 # delete them
@@ -37,12 +38,13 @@ touch ~/dotfiles-multiplexer/built-dots/.gitconfig
 ./build-scripts/.bash_aliases-includes.sh $INCLUDE_ALIASES
 ./build-scripts/.vimrc-includes.sh $INCLUDE_VIMRC
 ./build-scripts/.gitconfig-includes.sh $INCLUDE_GITCONFIG
+./build-scripts/.tmux.conf-includes.sh $INCLUDE_TMUXCONF
 
 # overwrite existing symbolic links if they exist
 ln -sf ~/dotfiles-multiplexer/.bashrc ~/.bashrc
 ln -sf ~/dotfiles-multiplexer/built-dots/.bash_aliases ~/.bash_aliases
 ln -sf ~/dotfiles-multiplexer/built-dots/.vimrc ~/.vimrc
-ln -sf ~/dotfiles-multiplexer/.tmux.conf ~/.tmux.conf
+ln -sf ~/dotfiles-multiplexer/built-dots/.tmux.conf ~/.tmux.conf
 ln -sf ~/dotfiles-multiplexer/built-dots/.gitconfig ~/.gitconfig
 # there is no composition inclusion mechanism for ssh (possibly for security)
 # so we need to build the config file instead
