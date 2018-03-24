@@ -1,3 +1,4 @@
-bash.d/
+built-dots
+bash.d
 .ssh/
 *.swp

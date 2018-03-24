@@ -24,9 +24,15 @@ if [[ ! -L ~/.ssh/config ]]; then
   mv ~/.ssh/config ~/.ssh/config.original 2>/dev/null
 fi
 
+# build the 'include' dotfiles
+rm -r ~/dotfiles-multiplexer/built-dots/ 2>/dev/null
+mkdir -p ~/dotfiles-multiplexer/built-dots/
+touch ~/dotfiles-multiplexer/built-dots/.bash_aliases
+./build-scripts/add-bash-aliases-include.sh dotfiles-personal
+
 # overwrite existing symbolic links if they exist
 ln -sf ~/dotfiles-multiplexer/.bashrc ~/.bashrc
-ln -sf ~/dotfiles-multiplexer/.bash_aliases ~/.bash_aliases
+ln -sf ~/dotfiles-multiplexer/built-dots/.bash_aliases ~/.bash_aliases
 ln -sf ~/dotfiles-multiplexer/.vimrc ~/.vimrc
 ln -sf ~/dotfiles-multiplexer/.tmux.conf ~/.tmux.conf
 ln -sf ~/dotfiles-multiplexer/.gitconfig ~/.gitconfig
