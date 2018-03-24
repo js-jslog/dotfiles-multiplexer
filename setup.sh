@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # if no dotfile-multiplex config file exists, copy the template file
-if [[ ! -f ~/dotfile-multiplex.conf ]]; then
-  cp ./dotfile-multiplex-template.conf ~/dotfile-multiplex.conf
+if [[ ! -f ~/dotfiles-multiplexer.conf ]]; then
+  cp ./dotfiles-multiplexer.conf.template ~/dotfiles-multiplexer.conf
 fi
 
 # load in the user configured include vars
-. ~/dotfile-multiplex.conf
+. ~/dotfiles-multiplexer.conf
 
 # if any original files exist then we will just move them rather than 
 # delete them
