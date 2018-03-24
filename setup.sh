@@ -4,12 +4,13 @@ INCLUDE_ALIASES="dotfiles-personal dotfiles-rullion"
 INCLUDE_VIMRC="dotfiles-personal dotfiles-rullion"
 INCLUDE_GITCONFIG="dotfiles-personal dotfiles-rullion"
 INCLUDE_TMUXCONF="dotfiles-personal dotfiles-rullion"
+INCLUDE_SSHCONFIG="dotfiles-personal dotfiles-rullion"
 
 # if any original files exist then we will just move them rather than 
 # delete them
 # if the file is a symlink then it will have in all likelyhood been 
 # provisioned by a version controlled dotfile manager so can just
-# be overwritten by stage 2 below
+# be overwritten by stage 3 below
 if [[ ! -L ~/.bashrc ]]; then
   mv ~/.bashrc ~/.bashrc.original 2>/dev/null
 fi
@@ -26,19 +27,23 @@ if [[ ! -L ~/.gitconfig ]]; then
   mv ~/.gitconfig ~/.gitconfig.original 2>/dev/null
 fi
 if [[ ! -L ~/.ssh/config ]]; then
+  # we need to provision the .ssh folder, just in case it doesn't exist yet
+  mkdir -p ~/.ssh
   mv ~/.ssh/config ~/.ssh/config.original 2>/dev/null
 fi
 
 # build the 'include' dotfiles
 rm -r ~/dotfiles-multiplexer/built-dots/ 2>/dev/null
-mkdir -p ~/dotfiles-multiplexer/built-dots/
+mkdir -p ~/dotfiles-multiplexer/built-dots/.ssh
 touch ~/dotfiles-multiplexer/built-dots/.bash_aliases
 touch ~/dotfiles-multiplexer/built-dots/.vimrc
 touch ~/dotfiles-multiplexer/built-dots/.gitconfig
+touch ~/dotfiles-multiplexer/built-dots/.ssh/config
 ./build-scripts/.bash_aliases-includes.sh $INCLUDE_ALIASES
 ./build-scripts/.vimrc-includes.sh $INCLUDE_VIMRC
 ./build-scripts/.gitconfig-includes.sh $INCLUDE_GITCONFIG
 ./build-scripts/.tmux.conf-includes.sh $INCLUDE_TMUXCONF
+./build-scripts/.ssh-config-parts.sh $INCLUDE_SSHCONFIG
 
 # overwrite existing symbolic links if they exist
 ln -sf ~/dotfiles-multiplexer/.bashrc ~/.bashrc
@@ -46,19 +51,8 @@ ln -sf ~/dotfiles-multiplexer/built-dots/.bash_aliases ~/.bash_aliases
 ln -sf ~/dotfiles-multiplexer/built-dots/.vimrc ~/.vimrc
 ln -sf ~/dotfiles-multiplexer/built-dots/.tmux.conf ~/.tmux.conf
 ln -sf ~/dotfiles-multiplexer/built-dots/.gitconfig ~/.gitconfig
-# there is no composition inclusion mechanism for ssh (possibly for security)
-# so we need to build the config file instead
-rm -r ~/dotfiles-multiplexer/.ssh/ || true
-mkdir -p ~/dotfiles-multiplexer/.ssh && touch ~/dotfiles-multiplexer/.ssh/config
-# we need to provision the .ssh folder, just in case it doesn't exist yet
-mkdir -p ~/.ssh
-if [[ -f ~/dotfiles-personal/.ssh/config ]]; then
-  cat ~/dotfiles-personal/.ssh/config >> ~/dotfiles-multiplexer/.ssh/config
-fi
-if [[ -f ~/dotfiles-rullion/.ssh/config ]]; then
-  cat ~/dotfiles-rullion/.ssh/config >> ~/dotfiles-multiplexer/.ssh/config
-fi
-ln -sf ~/dotfiles-multiplexer/.ssh/config ~/.ssh/config
+ln -sf ~/dotfiles-multiplexer/built-dots/.ssh/config ~/.ssh/config
+
 # overwriting sybolic links doesn't work if they are linked to directories apparently
 # need to remove it
 rm ~/bash.d || true
