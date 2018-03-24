@@ -3,7 +3,7 @@ A dotfile multiplexer
 
 ## Usage
 ### minimum setup
-Useable with minimum configuration with a single dotfile repository by placing the repository at `~/dotfiles` with the folder structure defined below.
+Useable with minimum configuration with a single dotfile repository by placing that repository at `~/dotfiles` with the folder structure defined below, and checking this dotfiles-multiplexer repository out at `~/dotfiles-multiplexer`.
 
 ### Multiplexing
 Multiplexing of files from multiple repos is achieved by defining a set of configuration variables at `~/dotfiles-multiplexer.conf`.
