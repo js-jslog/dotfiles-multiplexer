@@ -1,2 +1,2 @@
-# dotfiles-root
+# dotfiles-multiplexer
 A dotfile multiplexer

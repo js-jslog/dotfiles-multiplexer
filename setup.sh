@@ -25,33 +25,33 @@ if [[ ! -L ~/.ssh/config ]]; then
 fi
 
 # overwrite existing symbolic links if they exist
-ln -sf ~/dotfiles-root/.bashrc ~/.bashrc
-ln -sf ~/dotfiles-root/.bash_aliases ~/.bash_aliases
-ln -sf ~/dotfiles-root/.vimrc ~/.vimrc
-ln -sf ~/dotfiles-root/.tmux.conf ~/.tmux.conf
-ln -sf ~/dotfiles-root/.gitconfig ~/.gitconfig
+ln -sf ~/dotfiles-multiplexer/.bashrc ~/.bashrc
+ln -sf ~/dotfiles-multiplexer/.bash_aliases ~/.bash_aliases
+ln -sf ~/dotfiles-multiplexer/.vimrc ~/.vimrc
+ln -sf ~/dotfiles-multiplexer/.tmux.conf ~/.tmux.conf
+ln -sf ~/dotfiles-multiplexer/.gitconfig ~/.gitconfig
 # there is no composition inclusion mechanism for ssh (possibly for security)
 # so we need to build the config file instead
-rm -r ~/dotfiles-root/.ssh/ || true
-mkdir -p ~/dotfiles-root/.ssh && touch ~/dotfiles-root/.ssh/config
+rm -r ~/dotfiles-multiplexer/.ssh/ || true
+mkdir -p ~/dotfiles-multiplexer/.ssh && touch ~/dotfiles-multiplexer/.ssh/config
 # we need to provision the .ssh folder, just in case it doesn't exist yet
 mkdir -p ~/.ssh
 if [[ -f ~/dotfiles-personal/.ssh/config ]]; then
-  cat ~/dotfiles-personal/.ssh/config >> ~/dotfiles-root/.ssh/config
+  cat ~/dotfiles-personal/.ssh/config >> ~/dotfiles-multiplexer/.ssh/config
 fi
 if [[ -f ~/dotfiles-rullion/.ssh/config ]]; then
-  cat ~/dotfiles-rullion/.ssh/config >> ~/dotfiles-root/.ssh/config
+  cat ~/dotfiles-rullion/.ssh/config >> ~/dotfiles-multiplexer/.ssh/config
 fi
-ln -sf ~/dotfiles-root/.ssh/config ~/.ssh/config
+ln -sf ~/dotfiles-multiplexer/.ssh/config ~/.ssh/config
 # overwriting sybolic links doesn't work if they are linked to directories apparently
 # need to remove it
 rm ~/bash.d || true
 # the bash.d directory doesn't have any of it's own files, so it is excluded from the repo and
 # we need to create it during runtime
-rm -r ~/dotfiles-root/bash.d/ || true
-mkdir ~/dotfiles-root/bash.d/
+rm -r ~/dotfiles-multiplexer/bash.d/ || true
+mkdir ~/dotfiles-multiplexer/bash.d/
 # now we can create the link
-ln -s ~/dotfiles-root/bash.d ~/bash.d
+ln -s ~/dotfiles-multiplexer/bash.d ~/bash.d
 
 # filling the bash.d folder with scripts to be run at shell initiation
 # bash files should contain exported environment variables and functions for interactive shells
