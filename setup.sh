@@ -40,10 +40,6 @@ rm ~/bash.d 2>/dev/null
 rm -r ~/dotfiles-multiplexer/built-dots/ 2>/dev/null
 mkdir -p ~/dotfiles-multiplexer/built-dots/.ssh
 mkdir -p ~/dotfiles-multiplexer/built-dots/bash.d
-touch ~/dotfiles-multiplexer/built-dots/.bash_aliases
-touch ~/dotfiles-multiplexer/built-dots/.vimrc
-touch ~/dotfiles-multiplexer/built-dots/.gitconfig
-touch ~/dotfiles-multiplexer/built-dots/.ssh/config
 ./build-scripts/.bash_aliases-includes.sh $INCLUDE_ALIASES
 ./build-scripts/.vimrc-includes.sh $INCLUDE_VIMRC
 ./build-scripts/.gitconfig-includes.sh $INCLUDE_GITCONFIG
