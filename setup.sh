@@ -1,6 +1,7 @@
 #!/bin/bash
 
 INCLUDE_ALIASES="dotfiles-personal dotfiles-rullion"
+INCLUDE_VIMRC="dotfiles-personal dotfiles-rullion"
 
 # if any original files exist then we will just move them rather than 
 # delete them
@@ -30,12 +31,14 @@ fi
 rm -r ~/dotfiles-multiplexer/built-dots/ 2>/dev/null
 mkdir -p ~/dotfiles-multiplexer/built-dots/
 touch ~/dotfiles-multiplexer/built-dots/.bash_aliases
+touch ~/dotfiles-multiplexer/built-dots/.vimrc
 ./build-scripts/.bash_aliases-includes.sh $INCLUDE_ALIASES
+./build-scripts/.vimrc-includes.sh $INCLUDE_VIMRC
 
 # overwrite existing symbolic links if they exist
 ln -sf ~/dotfiles-multiplexer/.bashrc ~/.bashrc
 ln -sf ~/dotfiles-multiplexer/built-dots/.bash_aliases ~/.bash_aliases
-ln -sf ~/dotfiles-multiplexer/.vimrc ~/.vimrc
+ln -sf ~/dotfiles-multiplexer/built-dots/.vimrc ~/.vimrc
 ln -sf ~/dotfiles-multiplexer/.tmux.conf ~/.tmux.conf
 ln -sf ~/dotfiles-multiplexer/.gitconfig ~/.gitconfig
 # there is no composition inclusion mechanism for ssh (possibly for security)
