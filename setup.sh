@@ -32,6 +32,9 @@ if [[ ! -L ~/.ssh/config ]]; then
   mkdir -p ~/.ssh
   mv ~/.ssh/config ~/.ssh/config.original 2>/dev/null
 fi
+# overwriting sybolic links doesn't work if they are linked to directories apparently
+# need to remove it
+rm ~/bash.d 2>/dev/null
 
 # build the 'include' dotfiles
 rm -r ~/dotfiles-multiplexer/built-dots/ 2>/dev/null
@@ -55,12 +58,7 @@ ln -sf ~/dotfiles-multiplexer/built-dots/.vimrc ~/.vimrc
 ln -sf ~/dotfiles-multiplexer/built-dots/.tmux.conf ~/.tmux.conf
 ln -sf ~/dotfiles-multiplexer/built-dots/.gitconfig ~/.gitconfig
 ln -sf ~/dotfiles-multiplexer/built-dots/.ssh/config ~/.ssh/config
-
-# overwriting sybolic links doesn't work if they are linked to directories apparently
-# need to remove it
-rm ~/bash.d 2>/dev/null
 ln -s ~/dotfiles-multiplexer/built-dots/bash.d ~/bash.d
-
 
 # filling the profile.d folder with scripts to be run at login shell initiation
 # profile files should contain exported environment variables and functions for login shells

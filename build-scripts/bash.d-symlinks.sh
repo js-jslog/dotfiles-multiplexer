@@ -7,7 +7,7 @@ for dotfolder_name in $dotfolder_names; do
     for bashpath in $(find ~/$dotfolder_name/bash.d/ \( -name '*.sh' \))
     do
       bashname=$(basename "${bashpath}")
-      sudo ln -sf $bashpath ~/bash.d/${dotfolder_name/-/}-$bashname
+      sudo ln -s $bashpath ~/dotfiles-multiplexer/built-dots/bash.d/${dotfolder_name/-/}-$bashname
     done
   fi
 done
