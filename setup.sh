@@ -6,6 +6,7 @@ INCLUDE_GITCONFIG="dotfiles-personal dotfiles-rullion"
 INCLUDE_TMUXCONF="dotfiles-personal dotfiles-rullion"
 INCLUDE_SSHCONFIG="dotfiles-personal dotfiles-rullion"
 INCLUDE_BASHD="dotfiles-personal dotfiles-rullion"
+INCLUDE_PROFILED="dotfiles-personal"
 
 # if any original files exist then we will just move them rather than 
 # delete them
@@ -46,6 +47,7 @@ mkdir -p ~/dotfiles-multiplexer/built-dots/bash.d
 ./build-scripts/.tmux.conf-includes.sh $INCLUDE_TMUXCONF
 ./build-scripts/.ssh-config-parts.sh $INCLUDE_SSHCONFIG
 ./build-scripts/bash.d-symlinks.sh $INCLUDE_BASHD
+./build-scripts/profile.d-symlinks.sh $INCLUDE_PROFILED
 
 # overwrite existing symbolic links if they exist
 ln -sf ~/dotfiles-multiplexer/.bashrc ~/.bashrc
@@ -55,20 +57,3 @@ ln -sf ~/dotfiles-multiplexer/built-dots/.tmux.conf ~/.tmux.conf
 ln -sf ~/dotfiles-multiplexer/built-dots/.gitconfig ~/.gitconfig
 ln -sf ~/dotfiles-multiplexer/built-dots/.ssh/config ~/.ssh/config
 ln -s ~/dotfiles-multiplexer/built-dots/bash.d ~/bash.d
-
-# filling the profile.d folder with scripts to be run at login shell initiation
-# profile files should contain exported environment variables and functions for login shells
-if [ -d ~/dotfiles-rullion/profile.d/ ]; then
-  for profilepath in $(find ~/dotfiles-rullion/profile.d/ \( -name '*.sh' \))
-  do
-    profilename=$(basename "${profilepath}")
-    sudo ln -sf $profilepath /etc/profile.d/rullion-$profilename
-  done
-fi
-if [ -d ~/dotfiles-personal/profile.d/ ]; then
-  for profilepath in $(find ~/dotfiles-personal/profile.d/ \( -name '*.sh' \))
-  do
-    profilename=$(basename "${profilepath}")
-    sudo ln -sf $profilepath /etc/profile.d/personal-$profilename
-  done
-fi
