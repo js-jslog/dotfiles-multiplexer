@@ -2,11 +2,13 @@
 # these variables determine which order the dotfile repos will be read for each 
 # type of configuration file multiplex being generated
 
-include_aliases="dotfiles"
-include_vimrc="dotfiles"
-include_gitconfig="dotfiles"
-include_tmuxconf="dotfiles"
-include_sshconfig="dotfiles"
-include_bashd="dotfiles"
-include_profiled="dotfiles"
+declare -A config
+
+config[include_aliases]="dotfiles-personal"
+config[include_vimrc]="dotfiles"
+config[include_gitconfig]="dotfiles"
+config[include_tmuxconf]="dotfiles"
+config[include_sshconfig]="dotfiles"
+config[include_bashd]="dotfiles"
+config[include_profiled]="dotfiles"
 
