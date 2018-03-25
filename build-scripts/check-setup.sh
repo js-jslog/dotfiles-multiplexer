@@ -11,7 +11,7 @@ for conf_category in ${!config[@]}; do
   for dotfolder in ${config[$conf_category]}; do
     echo $dotfolder
     if [ ! -d ~/$dotfolder ]; then
-      echo "WARNING: You have configured $conf_category to use a non-existant directory at ~/$dotfolder. Please check your config before we ruin your home directory"
+      echo "WARNING: You have configured $conf_category to use a non-existant directory at ~/$dotfolder. Please check your config at ~/.dotfiles-multiplexer.conf before we ruin your home directory"
       config_ok=false
     fi
   done

@@ -5,12 +5,12 @@ set -e
 multiplexer="$PWD/${0%/*}"
 
 # if no dotfile-multiplex config file exists, copy the template file
-if [ ! -f ~/dotfiles-multiplexer.conf ]; then
-  cp $multiplexer/dotfiles-multiplexer.conf.template ~/dotfiles-multiplexer.conf
+if [ ! -f ~/.dotfiles-multiplexer.conf ]; then
+  cp $multiplexer/.dotfiles-multiplexer.conf.template ~/.dotfiles-multiplexer.conf
 fi
 
 # load in the user configured include vars
-. ~/dotfiles-multiplexer.conf
+. ~/.dotfiles-multiplexer.conf
 
 # check whether a working setup has been configured
 . $multiplexer/build-scripts/check-setup.sh
