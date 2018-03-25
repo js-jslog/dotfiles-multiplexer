@@ -48,11 +48,11 @@ rm ~/bash.d 2>/dev/null
 rm -r $multiplexer/built-dots/ 2>/dev/null
 mkdir -p $multiplexer/built-dots/.ssh
 mkdir -p $multiplexer/built-dots/bash.d
-. $multiplexer/build-scripts/.bash_aliases-includes.sh ${config[include_aliases]}
-. $multiplexer/build-scripts/.vimrc-includes.sh ${config[include_vimrc]}
-. $multiplexer/build-scripts/.gitconfig-includes.sh ${config[include_gitconfig]}
-. $multiplexer/build-scripts/.tmux.conf-includes.sh ${config[include_tmuxconf]}
-. $multiplexer/build-scripts/.ssh-config-parts.sh ${config[include_sshconfig]}
+. $multiplexer/build-scripts/bash_aliases-includes.sh ${config[include_aliases]}
+. $multiplexer/build-scripts/vimrc-includes.sh ${config[include_vimrc]}
+. $multiplexer/build-scripts/gitconfig-includes.sh ${config[include_gitconfig]}
+. $multiplexer/build-scripts/tmux.conf-includes.sh ${config[include_tmuxconf]}
+. $multiplexer/build-scripts/ssh-config-parts.sh ${config[include_sshconfig]}
 . $multiplexer/build-scripts/bash.d-symlinks.sh ${config[include_bashd]}
 . $multiplexer/build-scripts/profile.d-symlinks.sh ${config[include_profiled]}
 
