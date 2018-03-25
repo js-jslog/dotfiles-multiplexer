@@ -64,3 +64,6 @@ ln -sf $multiplexer/built-dots/.tmux.conf ~/.tmux.conf
 ln -sf $multiplexer/built-dots/.gitconfig ~/.gitconfig
 ln -sf $multiplexer/built-dots/.ssh/config ~/.ssh/config
 ln -s $multiplexer/built-dots/bash.d ~/bash.d
+
+# do a scan of the profile.d folder for broken links (possibly from previous runs)
+. $multiplexer/build-scripts/check-broken-symlinks.sh
