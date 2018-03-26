@@ -1,4 +1,5 @@
 #!/bin/bash
+echo 1
 
 set -e
 
@@ -9,9 +10,11 @@ if [ ! -f ~/.dotfiles-multiplexer.conf ]; then
   cp $multiplexer/.dotfiles-multiplexer.conf.template ~/.dotfiles-multiplexer.conf
 fi
 
+echo 2
 # load in the user configured include vars
 . ~/.dotfiles-multiplexer.conf
 
+echo 3
 # check whether a working setup has been configured
 . $multiplexer/build-scripts/check-setup.sh
 
@@ -21,30 +24,34 @@ fi
 # provisioned by a version controlled dotfile manager so can just
 # be overwritten by stage 3 below
 if [ ! -L ~/.bashrc ]; then
-  mv ~/.bashrc ~/.bashrc.original 2>/dev/null
+  mv ~/.bashrc ~/.bashrc.original 2>/dev/null || true
 fi
 if [ ! -L ~/.bash_aliases ]; then
-  mv ~/.bash_aliases ~/.bash_aliases.original 2>/dev/null
+  mv ~/.bash_aliases ~/.bash_aliases.original 2>/dev/null || true
 fi
 if [ ! -L ~/.vimrc ]; then
-  mv ~/.vimrc ~/.vimrc.original 2>/dev/null
+  mv ~/.vimrc ~/.vimrc.original 2>/dev/null || true
 fi
 if [ ! -L ~/.tmux.conf ]; then
-  mv ~/.tmux.conf ~/.tmux.conf.original 2>/dev/null
+  mv ~/.tmux.conf ~/.tmux.conf.original 2>/dev/null || true
 fi
+echo 4
 if [ ! -L ~/.gitconfig ]; then
-  mv ~/.gitconfig ~/.gitconfig.original 2>/dev/null
+  mv ~/.gitconfig ~/.gitconfig.original 2>/dev/null || true
 fi
 if [ ! -L ~/.ssh/config ]; then
   # we need to provision the .ssh folder, just in case it doesn't exist yet
   mkdir -p ~/.ssh
-  mv ~/.ssh/config ~/.ssh/config.original 2>/dev/null
+  mv ~/.ssh/config ~/.ssh/config.original 2>/dev/null || true
 fi
+echo 5
 # overwriting sybolic links doesn't work if they are linked to directories apparently
 # need to remove it
-rm ~/bash.d 2>/dev/null
+rm ~/bash.d 2>/dev/null || true
+echo 6
 
 # build the 'include' dotfiles
+echo $multiplexer
 rm -r $multiplexer/built-dots/ 2>/dev/null
 mkdir -p $multiplexer/built-dots/.ssh
 mkdir -p $multiplexer/built-dots/bash.d
