@@ -1,5 +1,4 @@
 #!/bin/bash
-echo 1
 
 set -e
 
@@ -10,11 +9,9 @@ if [ ! -f ~/.dotfiles-multiplexer.conf ]; then
   cp $multiplexer/.dotfiles-multiplexer.conf.template ~/.dotfiles-multiplexer.conf
 fi
 
-echo 2
 # load in the user configured include vars
 . ~/.dotfiles-multiplexer.conf
 
-echo 3
 # check whether a working setup has been configured
 . $multiplexer/build-scripts/check-setup.sh
 
@@ -35,7 +32,6 @@ fi
 if [ ! -L ~/.tmux.conf ]; then
   mv ~/.tmux.conf ~/.tmux.conf.original 2>/dev/null || true
 fi
-echo 4
 if [ ! -L ~/.gitconfig ]; then
   mv ~/.gitconfig ~/.gitconfig.original 2>/dev/null || true
 fi
@@ -44,15 +40,12 @@ if [ ! -L ~/.ssh/config ]; then
   mkdir -p ~/.ssh
   mv ~/.ssh/config ~/.ssh/config.original 2>/dev/null || true
 fi
-echo 5
 # overwriting sybolic links doesn't work if they are linked to directories apparently
 # need to remove it
 rm ~/bash.d 2>/dev/null || true
-echo 6
 
 # build the 'include' dotfiles
-echo $multiplexer
-rm -r $multiplexer/built-dots/ 2>/dev/null
+rm -r $multiplexer/built-dots/ 2>/dev/null || true
 mkdir -p $multiplexer/built-dots/.ssh
 mkdir -p $multiplexer/built-dots/bash.d
 . $multiplexer/build-scripts/bash_aliases-includes.sh ${config[include_aliases]}
