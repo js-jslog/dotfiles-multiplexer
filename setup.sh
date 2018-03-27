@@ -67,3 +67,5 @@ ln -s $multiplexer/built-dots/bash.d ~/bash.d
 
 # do a scan of the profile.d folder for broken links (possibly from previous runs)
 . $multiplexer/build-scripts/check-broken-symlinks.sh
+
+echo "Complete"
