@@ -7,3 +7,13 @@ function aliasesToLocations() {
     echo $location
   done
 }
+
+function locationsToAliases() {
+  for location in $@; do
+    for alias in $setup_aliases; do
+      if [ "$(aliasesToLocations $alias)" = "$location" ]; then
+        echo $alias
+      fi
+    done
+  done
+}
