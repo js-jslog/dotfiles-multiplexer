@@ -39,9 +39,9 @@ Dotfiles-multiplexer helps to achieve the latter in a way which is simple and ma
 ### Basic setup (ie single config repository)
 It is possible to deploy a single repositoy of configuration files using the dotfiles-multiplexer in just 3 steps. See the **Dotfile folder structure** section below which details the structure of the config repository required to work with dotfiles-multiplexer.
 
-1. git clone git@github.com:js-jslog/dotfiles-multiplexer.git ~/dotfiles-multiplexer
-2. git clone {your dotfiles config repository} ~/dotfiles
-3. cd ~/dotfiles-multiplexer && ./setup.sh
+1. `git clone git@github.com:js-jslog/dotfiles-multiplexer.git ~/dotfiles-multiplexer`
+2. `git clone {your dotfiles config repository} ~/dotfiles`
+3. `cd ~/dotfiles-multiplexer && ./setup.sh`
 
 ### Multiplexing
 Multiplexing of files from multiple repos is achieved by defining a set of configuration variables at `~/.dotfiles-multiplexer.yml`. Once this file has been setup and the configured repositories checked out the the configured locations, the `setup.sh` script can be run from inside the dotfiles-multiplexer folder followed by `source ~/.bashrc`
