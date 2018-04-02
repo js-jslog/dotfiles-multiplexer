@@ -44,9 +44,23 @@ It is possible to deploy a single repositoy of configuration files using the dot
 3. cd ~/dotfiles-multiplexer && ./setup.sh
 
 ### Multiplexing
-Multiplexing of files from multiple repos is achieved by defining a set of configuration variables at `~/.dotfiles-multiplexer.yml`.
+Multiplexing of files from multiple repos is achieved by defining a set of configuration variables at `~/.dotfiles-multiplexer.yml`. Once this file has been setup and the configured repositories checked out the the configured locations, the `setup.sh` script can be run from inside the dotfiles-multiplexer folder followed by `source ~/.bashrc`
 
 A sample of the configuration file exists in this repository at `{dotfiles-multiplexer project}/.dotfiles-multiplexer.yml.template`.
+
+```
+aliases: "dotscore"
+dotscore:
+  location: "$HOME/dotfiles"
+dots:
+  sshconf: "dotscore"
+  gitconfig: "dotscore"
+  vimrc: "dotscore"
+  tmuxconf: "dotscore"
+  bashaliases: "dotscore"
+  bashdfolder: "dotscore"
+  profiledfolder: "dotscore"
+```
 
 The structure requires a little explanation.
 
