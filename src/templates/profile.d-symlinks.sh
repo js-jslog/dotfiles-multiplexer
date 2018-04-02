@@ -1,6 +1,6 @@
 #! /bin/bash
 
-dotfolder_names=$@
+dotfolder_locations=$@
 
 if [ ! $multiplexer ]; then
   echo "This script should only be run by the dotfile-multiplexer"
@@ -9,12 +9,13 @@ fi
 
 # filling the profile.d folder with scripts to be run at login shell initiation
 # profile files should contain exported environment variables and functions for login shells
-for dotfolder_name in $dotfolder_names; do
-  if [ -d ~/$dotfolder_name/profile.d/ ]; then
-    for profilepath in $(find ~/$dotfolder_name/profile.d/ \( -name '*.sh' \))
+for dotfolder_location in $dotfolder_locations; do
+  if [ -d $dotfolder_location/profile.d/ ]; then
+    for profilepath in $(find $dotfolder_location/profile.d/ \( -name '*.sh' \))
     do
+      reponame=$(basename ${dotfolder_location})
       profilename=$(basename "${profilepath}")
-      sudo ln -s $profilepath /etc/profile.d/${dotfolder_name/-/}-$profilename
+      sudo ln -s $profilepath /etc/profile.d/$reponame-$profilename
     done
   fi
 done
