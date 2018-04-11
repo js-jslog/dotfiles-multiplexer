@@ -1,11 +1,11 @@
-aliases: "dotscore"
-dotscore:
+aliases: "dots"
+dots:
   location: "$HOME/dotfiles"
 dots:
-  sshconf: "dotscore"
-  gitconfig: "dotscore"
-  vimrc: "dotscore"
-  tmuxconf: "dotscore"
-  bashaliases: "dotscore"
-  bashdfolder: "dotscore"
-  profiledfolder: "dotscore"
+  sshconf: "dots"
+  gitconfig: "dots"
+  vimrc: "dots"
+  tmuxconf: "dots"
+  bashaliases: "dots"
+  bashdfolder: "dots"
+  profiledfolder: "dots"

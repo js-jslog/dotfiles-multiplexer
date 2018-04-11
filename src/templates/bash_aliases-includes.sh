@@ -10,7 +10,7 @@ fi
 . $multiplexer/src/helpers/alias-to-location.sh
 
 # dotfiles-multiplexer aliases
-echo "alias dotsmplex=\"cd $multiplexer\"" >> $multiplexer/build/.bash_aliases
+echo "alias dotsmp=\"cd $multiplexer\"" >> $multiplexer/build/.bash_aliases
 
 # aliases for imported dotfolders
 for dotfolder_location in $dotfolder_locations; do
