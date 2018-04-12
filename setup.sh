@@ -4,6 +4,7 @@ set -e
 
 multiplexer="$PWD/${0%/*}"
 build="$multiplexer/build/"
+build_dotrepos="$build/dotrepos/"
 src="$multiplexer/src/"
 
 # import dependencies
@@ -25,7 +26,7 @@ eval $(parse_yml $HOME/.dotfiles-multiplexer.yml "setup_")
 sudo rm -r $build 2>/dev/null || true
 
 # check out the repo's if configured
-mkdir -p $build/repos/
+mkdir -p $build_dotrepos
 for alias in $setup_aliases; do
   git clone $(aliasesToRepos $alias) $(aliasesToLocations $alias)
 done
@@ -63,13 +64,13 @@ rm $HOME/bash.d 2>/dev/null || true
 # build the 'include' dotfiles
 mkdir -p $build/.ssh
 mkdir -p $build/bash.d
-. $src/templates/bash_aliases-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_bashaliases))
-. $src/templates/vimrc-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_vimrc))
-. $src/templates/gitconfig-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_gitconfig))
-. $src/templates/tmux.conf-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_tmuxconf))
-. $src/templates/ssh-config-parts.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_sshconf))
-. $src/templates/bash.d-symlinks.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_bashdfolder))
-. $src/templates/profile.d-symlinks.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_profiledfolder))
+. $src/templates/bash_aliases-includes.sh $(filterExcludedAliases $setup_compose_bashaliases)
+. $src/templates/vimrc-includes.sh $(filterExcludedAliases $setup_compose_vimrc)
+. $src/templates/gitconfig-includes.sh $(filterExcludedAliases $setup_compose_gitconfig)
+. $src/templates/tmux.conf-includes.sh $(filterExcludedAliases $setup_compose_tmuxconf)
+. $src/templates/ssh-config-parts.sh $(filterExcludedAliases $setup_compose_sshconf)
+. $src/templates/bash.d-symlinks.sh $(filterExcludedAliases $setup_compose_bashdfolder)
+. $src/templates/profile.d-symlinks.sh $(filterExcludedAliases $setup_compose_profiledfolder)
 
 # overwrite existing symbolic links if they exist
 ln -sf $multiplexer/.bashrc $HOME/.bashrc
