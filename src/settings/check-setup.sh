@@ -9,7 +9,7 @@ for alias in $setup_aliases; do
   if [ $(git ls-remote $repo -q && echo $?) ]; then
     echo checked $alias at $repo exists
   else
-    echo FAILURE: $alias configured repository location $repo does not exist or is not accessible
+    echo FAILURE: the configured repository for $alias at \"$repo\" does not exist or is not accessible
     config_ok=false
   fi
 done

@@ -6,7 +6,6 @@ multiplexer="$PWD/${0%/*}"
 
 # import dependencies
 . $multiplexer/src/helpers/config-helper.sh
-. $multiplexer/src/helpers/filter-excluded-aliases.sh
 . $multiplexer/src/settings/yml-parser.sh
 
 # if no dotfile-multiplex config file exists, copy the template file
@@ -21,7 +20,7 @@ eval $(parse_yml $HOME/.dotfiles-multiplexer.yml "setup_")
 . $multiplexer/src/settings/check-setup.sh
 
 # destroy the original build directory
-rm -r $multiplexer/build/ 2>/dev/null || true
+sudo rm -r $multiplexer/build/ 2>/dev/null || true
 
 # check out the repo's if configured
 mkdir -p $multiplexer/build/repos/
