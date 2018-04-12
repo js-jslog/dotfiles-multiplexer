@@ -4,10 +4,11 @@ set -e
 
 multiplexer="$PWD/${0%/*}"
 build="$multiplexer/build/"
+src="$multiplexer/src/"
 
 # import dependencies
-. $multiplexer/src/helpers/config-helper.sh
-. $multiplexer/src/settings/yml-parser.sh
+. $src/helpers/config-helper.sh
+. $src/settings/yml-parser.sh
 
 # if no dotfile-multiplex config file exists, copy the template file
 if [ ! -f $HOME/.dotfiles-multiplexer.yml ]; then
@@ -18,7 +19,7 @@ fi
 eval $(parse_yml $HOME/.dotfiles-multiplexer.yml "setup_")
 
 # check the setup variables
-. $multiplexer/src/settings/check-setup.sh
+. $src/settings/check-setup.sh
 
 # destroy the original build directory
 sudo rm -r $build 2>/dev/null || true
@@ -62,13 +63,13 @@ rm $HOME/bash.d 2>/dev/null || true
 # build the 'include' dotfiles
 mkdir -p $build/.ssh
 mkdir -p $build/bash.d
-. $multiplexer/src/templates/bash_aliases-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_bashaliases))
-. $multiplexer/src/templates/vimrc-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_vimrc))
-. $multiplexer/src/templates/gitconfig-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_gitconfig))
-. $multiplexer/src/templates/tmux.conf-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_tmuxconf))
-. $multiplexer/src/templates/ssh-config-parts.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_sshconf))
-. $multiplexer/src/templates/bash.d-symlinks.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_bashdfolder))
-. $multiplexer/src/templates/profile.d-symlinks.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_profiledfolder))
+. $src/templates/bash_aliases-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_bashaliases))
+. $src/templates/vimrc-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_vimrc))
+. $src/templates/gitconfig-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_gitconfig))
+. $src/templates/tmux.conf-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_tmuxconf))
+. $src/templates/ssh-config-parts.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_sshconf))
+. $src/templates/bash.d-symlinks.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_bashdfolder))
+. $src/templates/profile.d-symlinks.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_profiledfolder))
 
 # overwrite existing symbolic links if they exist
 ln -sf $multiplexer/.bashrc $HOME/.bashrc
@@ -80,6 +81,6 @@ ln -sf $build/.ssh/config $HOME/.ssh/config
 ln -s $build/bash.d $HOME/bash.d
 
 # do a scan of the profile.d folder for broken links (possibly from previous runs)
-. $multiplexer/src/settings/check-broken-symlinks.sh
+. $src/settings/check-broken-symlinks.sh
 
 echo "Complete"

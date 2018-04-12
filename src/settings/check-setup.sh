@@ -2,7 +2,7 @@
 
 config_ok=true
 
-. $multiplexer/src/helpers/config-helper.sh
+. $src/helpers/config-helper.sh
 
 for alias in $setup_aliases; do
   repo=$(aliasesToRepos $alias)

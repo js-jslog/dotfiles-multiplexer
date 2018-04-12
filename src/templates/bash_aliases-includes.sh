@@ -6,8 +6,8 @@ if [ ! $multiplexer ]; then
   echo "This script should only be run by the dotfile-multiplexer"
   exit 1
 fi
-# TODO: fix the locationsToAliases calls below
-. $multiplexer/src/helpers/config-helper.sh
+
+. $src/helpers/config-helper.sh
 
 # dotfiles-multiplexer aliases
 echo "alias dotsmp=\"cd $multiplexer\"" >> $build/.bash_aliases
