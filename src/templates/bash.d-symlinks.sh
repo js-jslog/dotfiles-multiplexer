@@ -15,7 +15,7 @@ for dotfolder_location in $dotfolder_locations; do
     do
       reponame=$(basename ${dotfolder_location})
       bashname=$(basename "${bashpath}")
-      sudo ln -s $bashpath $multiplexer/build/bash.d/$reponame-$bashname
+      sudo ln -s $bashpath $build/bash.d/$reponame-$bashname
     done
   fi
 done

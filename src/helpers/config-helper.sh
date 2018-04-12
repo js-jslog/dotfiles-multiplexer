@@ -10,7 +10,7 @@ function aliasesToRepos() {
 
 function aliasesToLocations() {
   for alias in $@; do
-    echo "$multiplexer/build/repos/$alias/"
+    echo "$build/repos/$alias/"
   done
 }
 

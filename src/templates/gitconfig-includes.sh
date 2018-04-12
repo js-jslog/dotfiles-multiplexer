@@ -7,7 +7,7 @@ if [ ! $multiplexer ]; then
   exit 1
 fi
 
-echo "[include]" >> $multiplexer/build/.gitconfig
+echo "[include]" >> $build/.gitconfig
 for dotfolder_location in $dotfolder_locations; do
-  echo "  path = $dotfolder_location/.gitconfig" >> $multiplexer/build/.gitconfig
+  echo "  path = $dotfolder_location/.gitconfig" >> $build/.gitconfig
 done

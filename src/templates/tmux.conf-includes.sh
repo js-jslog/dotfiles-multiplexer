@@ -8,5 +8,5 @@ if [ ! $multiplexer ]; then
 fi
 
 for dotfolder_location in $dotfolder_locations; do
-  echo "if-shell \"[ -f $dotfolder_location/.tmux.conf ]\" 'source $dotfolder_location/.tmux.conf'" >> $multiplexer/build/.tmux.conf
+  echo "if-shell \"[ -f $dotfolder_location/.tmux.conf ]\" 'source $dotfolder_location/.tmux.conf'" >> $build/.tmux.conf
 done

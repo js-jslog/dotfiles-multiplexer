@@ -3,6 +3,7 @@
 set -e
 
 multiplexer="$PWD/${0%/*}"
+build="$multiplexer/build/"
 
 # import dependencies
 . $multiplexer/src/helpers/config-helper.sh
@@ -20,10 +21,10 @@ eval $(parse_yml $HOME/.dotfiles-multiplexer.yml "setup_")
 . $multiplexer/src/settings/check-setup.sh
 
 # destroy the original build directory
-sudo rm -r $multiplexer/build/ 2>/dev/null || true
+sudo rm -r $build 2>/dev/null || true
 
 # check out the repo's if configured
-mkdir -p $multiplexer/build/repos/
+mkdir -p $build/repos/
 for alias in $setup_aliases; do
   git clone $(aliasesToRepos $alias) $(aliasesToLocations $alias)
 done
@@ -59,8 +60,8 @@ fi
 rm $HOME/bash.d 2>/dev/null || true
 
 # build the 'include' dotfiles
-mkdir -p $multiplexer/build/.ssh
-mkdir -p $multiplexer/build/bash.d
+mkdir -p $build/.ssh
+mkdir -p $build/bash.d
 . $multiplexer/src/templates/bash_aliases-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_bashaliases))
 . $multiplexer/src/templates/vimrc-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_vimrc))
 . $multiplexer/src/templates/gitconfig-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_gitconfig))
@@ -71,12 +72,12 @@ mkdir -p $multiplexer/build/bash.d
 
 # overwrite existing symbolic links if they exist
 ln -sf $multiplexer/.bashrc $HOME/.bashrc
-ln -sf $multiplexer/build/.bash_aliases $HOME/.bash_aliases
-ln -sf $multiplexer/build/.vimrc $HOME/.vimrc
-ln -sf $multiplexer/build/.tmux.conf $HOME/.tmux.conf
-ln -sf $multiplexer/build/.gitconfig $HOME/.gitconfig
-ln -sf $multiplexer/build/.ssh/config $HOME/.ssh/config
-ln -s $multiplexer/build/bash.d $HOME/bash.d
+ln -sf $build/.bash_aliases $HOME/.bash_aliases
+ln -sf $build/.vimrc $HOME/.vimrc
+ln -sf $build/.tmux.conf $HOME/.tmux.conf
+ln -sf $build/.gitconfig $HOME/.gitconfig
+ln -sf $build/.ssh/config $HOME/.ssh/config
+ln -s $build/bash.d $HOME/bash.d
 
 # do a scan of the profile.d folder for broken links (possibly from previous runs)
 . $multiplexer/src/settings/check-broken-symlinks.sh
