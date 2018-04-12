@@ -3,6 +3,8 @@
 function buildSymlinks() {
   local aliases=$@
   local alias
+  local bashpath
+  local bashname
   for alias in $aliases; do
     local dotsrepo=$(aliasesToLocations $alias)
     # filling the bash.d folder with scripts to be run at shell initiation
