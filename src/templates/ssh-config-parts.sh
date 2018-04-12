@@ -5,6 +5,7 @@
 function buildSshconfig() {
   local aliases=$@
   local alias
+
   for alias in $aliases; do
     local dotsrepo=$(aliasesToLocations $alias)
     if [ -f $dotsrepo/.ssh/config ]; then
@@ -13,6 +14,9 @@ function buildSshconfig() {
       printf "# end of file\n\n" >> $build/.ssh/config
     fi
   done
+
+  printf "\nComposing .ssh/config ...\n"
+  cat $build/.ssh/config
 }
 
 if [ ! $multiplexer ]; then

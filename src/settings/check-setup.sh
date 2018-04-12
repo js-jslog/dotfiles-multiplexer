@@ -7,9 +7,9 @@ config_ok=true
 for alias in $setup_aliases; do
   repo=$(aliasesToRepos $alias)
   if [ $(git ls-remote $repo -q && echo $?) ]; then
-    echo checked $alias at $repo exists
+    printf "\nChecked $alias at $repo exists\n\n"
   else
-    echo FAILURE: the configured repository for $alias at \"$repo\" does not exist or is not accessible
+    printf "\nFAILURE: the configured repository for $alias at \"$repo\" does not exist or is not accessible\n\n"
     config_ok=false
   fi
 done

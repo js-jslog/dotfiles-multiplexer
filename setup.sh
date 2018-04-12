@@ -66,7 +66,9 @@ fi
 # need to remove it
 rm $HOME/bash.d 2>/dev/null || true
 
-# build the 'include' dotfiles
+# build the 'composition' dotfiles
+printf "\nBEGINNING FILE COMPOSITION\n\n"
+
 mkdir -p $build/.ssh
 mkdir -p $build/bash.d
 . $src/templates/bash_aliases-includes.sh $(filterExcludedAliases $setup_compose_bashaliases)
@@ -76,6 +78,8 @@ mkdir -p $build/bash.d
 . $src/templates/ssh-config-parts.sh $(filterExcludedAliases $setup_compose_sshconf)
 . $src/templates/bash.d-symlinks.sh $(filterExcludedAliases $setup_compose_bashdfolder)
 . $src/templates/profile.d-symlinks.sh $(filterExcludedAliases $setup_compose_profiledfolder)
+
+printf "\nFILE COMPOSITION COMPLETE\n\n"
 
 # overwrite existing symbolic links if they exist
 ln -sf $multiplexer/.bashrc $HOME/.bashrc

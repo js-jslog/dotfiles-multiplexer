@@ -5,6 +5,9 @@ function buildSymlinks() {
   local alias
   local bashpath
   local bashname
+
+  printf "\nBuilding bash.d symlinks from the following sources:\n"
+
   for alias in $aliases; do
     local dotsrepo=$(aliasesToLocations $alias)
     # filling the bash.d folder with scripts to be run at shell initiation
@@ -14,6 +17,9 @@ function buildSymlinks() {
       do
         bashname=$(basename "${bashpath}")
         sudo ln -s $bashpath $build/bash.d/$alias-$bashname
+
+        printf "  $bashpath\n"
+
       done
     fi
   done

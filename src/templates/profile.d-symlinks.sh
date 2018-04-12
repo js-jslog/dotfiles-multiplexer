@@ -7,6 +7,9 @@ function buildSymlinks() {
   local alias
   local profilepath
   local profilename
+
+  printf "\nBuilding profile.d symlinks from the following sources:\n"
+
   for alias in $aliases; do
     local dotsrepo=$(aliasesToLocations $alias)
     if [ -d $dotsrepo/profile.d/ ]; then
@@ -14,6 +17,9 @@ function buildSymlinks() {
       do
         profilename=$(basename "${profilepath}")
         sudo ln -s $profilepath /etc/profile.d/$alias-$profilename
+
+        printf "  $profilepath\n"
+
       done
     fi
   done

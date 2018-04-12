@@ -3,11 +3,15 @@
 function composeGitconfig() {
   local aliases=$@
   local alias
+
   echo "[include]" >> $build/.gitconfig
   for alias in $aliases; do
     local dotsrepo=$(aliasesToLocations $alias)
     echo "  path = $dotsrepo/.gitconfig" >> $build/.gitconfig
   done
+
+  printf "\nComposing .gitconfig ...\n"
+  cat $build/.gitconfig
 }
 
 if [ ! $multiplexer ]; then

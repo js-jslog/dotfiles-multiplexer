@@ -3,6 +3,7 @@
 function composeVimconfig() {
   local aliases=$@
   local alias
+
   for alias in $aliases; do
     local dotsrepo=$(aliasesToLocations $alias)
     local cleanalias=${alias/-/}
@@ -11,6 +12,9 @@ function composeVimconfig() {
     echo "  source \$$cleanalias" >> $build/.vimrc
     echo "endif" >> $build/.vimrc
   done
+
+  printf "\nComposing .vimrc ...\n"
+  cat $build/.vimrc
 }
 
 if [ ! $multiplexer ]; then
