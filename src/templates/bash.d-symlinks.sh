@@ -9,7 +9,6 @@ function buildSymlinks() {
     if [ -d $dotsrepo/bash.d/ ]; then
       for bashpath in $(find $dotsrepo/bash.d/ \( -name '*.sh' \))
       do
-echo $bashpath
         bashname=$(basename "${bashpath}")
         sudo ln -s $bashpath $build/bash.d/$alias-$bashname
       done
