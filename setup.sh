@@ -3,9 +3,8 @@
 set -e
 
 multiplexer="$PWD/${0%/*}"
-build="$multiplexer/build/"
-build_dotrepos="$build/dotrepos/"
 src="$multiplexer/src/"
+build="$multiplexer/build/"
 
 # import dependencies
 . $src/helpers/config-helper.sh
@@ -24,9 +23,9 @@ eval $(parse_yml $HOME/.dotfiles-multiplexer.yml "setup_")
 
 # destroy the original build directory
 sudo rm -r $build 2>/dev/null || true
+mkdir -p $build
 
 # check out the repo's if configured
-mkdir -p $build_dotrepos
 for alias in $setup_aliases; do
   git clone $(aliasesToRepos $alias) $(aliasesToLocations $alias)
 done
