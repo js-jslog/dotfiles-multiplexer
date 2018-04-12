@@ -3,8 +3,8 @@
 set -e
 
 multiplexer="$PWD/${0%/*}"
-src="$multiplexer/src/"
-build="$multiplexer/build/"
+src="$multiplexer/src"
+build="$multiplexer/build"
 
 # import dependencies
 . $src/helpers/config-helper.sh
