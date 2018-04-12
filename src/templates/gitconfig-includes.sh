@@ -1,13 +1,18 @@
 #! /bin/bash
 
-dotfolder_locations=$@
+function composeGitconfig() {
+  local aliases=$@
+  local alias
+  echo "[include]" >> $build/.gitconfig
+  for alias in $aliases; do
+    local dotsrepo=$(aliasesToLocations $alias)
+    echo "  path = $dotsrepo/.gitconfig" >> $build/.gitconfig
+  done
+}
 
 if [ ! $multiplexer ]; then
   echo "This script should only be run by the dotfile-multiplexer"
   exit 1
 fi
 
-echo "[include]" >> $build/.gitconfig
-for dotfolder_location in $dotfolder_locations; do
-  echo "  path = $dotfolder_location/.gitconfig" >> $build/.gitconfig
-done
+composeGitconfig $@

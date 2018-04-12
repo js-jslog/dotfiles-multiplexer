@@ -2,6 +2,7 @@
 
 function buildSymlinks() {
   local aliases=$@
+  local alias
   for alias in $aliases; do
     local dotsrepo=$(aliasesToLocations $alias)
     # filling the bash.d folder with scripts to be run at shell initiation

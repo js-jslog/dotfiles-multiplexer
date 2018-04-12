@@ -1,16 +1,21 @@
 #! /bin/bash
 
-dotfolder_locations=$@
+function composeVimconfig() {
+  local aliases=$@
+  local alias
+  for alias in $aliases; do
+    local dotsrepo=$(aliasesToLocations $alias)
+    local cleanalias=${alias/-/}
+    echo "let \$$cleanalias=expand(\"$dotsrepo/.vimrc\")" >> $build/.vimrc
+    echo "if filereadable(\$$cleanalias)" >> $build/.vimrc
+    echo "  source \$$cleanalias" >> $build/.vimrc
+    echo "endif" >> $build/.vimrc
+  done
+}
 
 if [ ! $multiplexer ]; then
   echo "This script should only be run by the dotfile-multiplexer"
   exit 1
 fi
 
-for dotfolder_location in $dotfolder_locations; do
-  reponame=$(basename ${dotfolder_location/-/})
-  echo "let \$$reponame=expand(\"$dotfolder_location/.vimrc\")" >> $build/.vimrc
-  echo "if filereadable(\$$reponame)" >> $build/.vimrc
-  echo "  source \$$reponame" >> $build/.vimrc
-  echo "endif" >> $build/.vimrc
-done
+composeVimconfig $@
