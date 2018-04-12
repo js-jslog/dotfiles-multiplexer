@@ -36,22 +36,28 @@ done
 # if the file is a symlink then it will have in all likelyhood been 
 # provisioned by a version controlled dotfile manager so can just
 # be overwritten by stage 3 below
-if [ ! -L $HOME/.bashrc ]; then
+if [ ! -L $HOME/.bashrc ] && [ -f $HOME/.bashrc ]; then
+  echo Backing up original .bashrc to $HOME/.bashrc.original
   mv $HOME/.bashrc $HOME/.bashrc.original 2>/dev/null || true
 fi
-if [ ! -L $HOME/.bash_aliases ]; then
+if [ ! -L $HOME/.bash_aliases ] && [ -f $HOME/.bash_aliases ]; then
+  echo Backing up original .bash_aliases to $HOME/.bash_aliases.original
   mv $HOME/.bash_aliases $HOME/.bash_aliases.original 2>/dev/null || true
 fi
-if [ ! -L $HOME/.vimrc ]; then
+if [ ! -L $HOME/.vimrc ] && [ -f $HOME/.vimrc ]; then
+  echo Backing up original .vimrc to $HOME/.vimrc.original
   mv $HOME/.vimrc $HOME/.vimrc.original 2>/dev/null || true
 fi
-if [ ! -L $HOME/.tmux.conf ]; then
+if [ ! -L $HOME/.tmux.conf ] && [ -f $HOME/.tmux.conf ]; then
+  echo Backing up original .tmux.conf to $HOME/.tmux.conf.original
   mv $HOME/.tmux.conf $HOME/.tmux.conf.original 2>/dev/null || true
 fi
-if [ ! -L $HOME/.gitconfig ]; then
+if [ ! -L $HOME/.gitconfig ] && [ -f $HOME/.gitconfig ]; then
+  echo Backing up original .gitconfig to $HOME/.gitconfig.original
   mv $HOME/.gitconfig $HOME/.gitconfig.original 2>/dev/null || true
 fi
-if [ ! -L $HOME/.ssh/config ]; then
+if [ ! -L $HOME/.ssh/config ] && [ -f $HOME/.ssh/config ]; then
+  echo Backing up original .ssh/config to $HOME/.ssh/config.original
   # we need to provision the .ssh folder, just in case it doesn't exist yet
   mkdir -p $HOME/.ssh
   mv $HOME/.ssh/config $HOME/.ssh/config.original 2>/dev/null || true
