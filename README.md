@@ -49,23 +49,23 @@ Multiplexing of files from multiple repos is achieved by defining a set of confi
 A sample of the configuration file exists in this repository at `{dotfiles-multiplexer project}/.dotfiles-multiplexer.yml.template`.
 
 ```
-aliases: "dotscore"
-dotscore:
-  location: "$HOME/dotfiles"
+aliases: "dots"
 dots:
-  sshconf: "dotscore"
-  gitconfig: "dotscore"
-  vimrc: "dotscore"
-  tmuxconf: "dotscore"
-  bashaliases: "dotscore"
-  bashdfolder: "dotscore"
-  profiledfolder: "dotscore"
+  location: "$HOME/dotfiles"
+compose:
+  sshconf: "dots"
+  gitconfig: "dots"
+  vimrc: "dots"
+  tmuxconf: "dots"
+  bashaliases: "dots"
+  bashdfolder: "dots"
+  profiledfolder: "dots"
 ```
 
 The structure requires a little explanation.
 
 #### aliases
-The first entry in the config file is a list of aliases. In the template file there is just one, called dotscore. This is the nickname of the one dotfiles config repository which the file is configured to use. Multiple aliases can be added to this list, separated by whitespace.
+The first entry in the config file is a list of aliases. In the template file there is just one, called dots. This is the nickname of the one dotfiles config repository which the file is configured to use. Multiple aliases can be added to this list, separated by whitespace.
 
 #### location
 For each of the aliases defined in the previous section, we now define the absolute path in the file system that the repository which that aliase refers to. The syntax for this is:
@@ -75,8 +75,8 @@ For each of the aliases defined in the previous section, we now define the absol
 ```
 NOTE: use `$HOME` rather than ~ to denote the users home directory
 
-#### dots
-This section defines the configuration files which will be generated and the order in which the base config files will be loaded during this generation. The order is important in cases where config files share specific config elements with different values. The latter defined file will take priority for that element.
+#### compose
+This section defines the configuration files which will be generated and the order in which the base config files will be loaded during this composition. The order is important in cases where config files share specific config elements with different values. The latter defined file will take priority for that element.
 
 As you can see from the example, we use the repository alias for each of the configuration file types under the `dots:` node.
 

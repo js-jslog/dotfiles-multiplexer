@@ -1,7 +1,7 @@
 aliases: "dots"
 dots:
   location: "$HOME/dotfiles"
-dots:
+compose:
   sshconf: "dots"
   gitconfig: "dots"
   vimrc: "dots"

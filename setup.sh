@@ -51,13 +51,13 @@ mkdir -p $multiplexer/build/.ssh
 mkdir -p $multiplexer/build/bash.d
 . $multiplexer/src/helpers/alias-to-location.sh
 . $multiplexer/src/helpers/filter-excluded-aliases.sh
-. $multiplexer/src/templates/bash_aliases-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_dots_bashaliases))
-. $multiplexer/src/templates/vimrc-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_dots_vimrc))
-. $multiplexer/src/templates/gitconfig-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_dots_gitconfig))
-. $multiplexer/src/templates/tmux.conf-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_dots_tmuxconf))
-. $multiplexer/src/templates/ssh-config-parts.sh $(aliasesToLocations $(filterExcludedAliases $setup_dots_sshconf))
-. $multiplexer/src/templates/bash.d-symlinks.sh $(aliasesToLocations $(filterExcludedAliases $setup_dots_bashdfolder))
-. $multiplexer/src/templates/profile.d-symlinks.sh $(aliasesToLocations $(filterExcludedAliases $setup_dots_profiledfolder))
+. $multiplexer/src/templates/bash_aliases-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_bashaliases))
+. $multiplexer/src/templates/vimrc-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_vimrc))
+. $multiplexer/src/templates/gitconfig-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_gitconfig))
+. $multiplexer/src/templates/tmux.conf-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_tmuxconf))
+. $multiplexer/src/templates/ssh-config-parts.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_sshconf))
+. $multiplexer/src/templates/bash.d-symlinks.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_bashdfolder))
+. $multiplexer/src/templates/profile.d-symlinks.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_profiledfolder))
 
 # overwrite existing symbolic links if they exist
 ln -sf $multiplexer/.bashrc $HOME/.bashrc
