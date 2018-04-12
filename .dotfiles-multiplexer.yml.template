@@ -1,6 +1,6 @@
 aliases: "dots"
 dots:
-  location: "$HOME/dotfiles"
+  repo: "ENTER THE ADDRESS OF YOUR REPOSITORY HERE"
 compose:
   sshconf: "dots"
   gitconfig: "dots"

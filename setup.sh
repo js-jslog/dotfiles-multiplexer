@@ -4,17 +4,31 @@ set -e
 
 multiplexer="$PWD/${0%/*}"
 
+# import dependencies
+. $multiplexer/src/helpers/config-helper.sh
+. $multiplexer/src/helpers/filter-excluded-aliases.sh
+. $multiplexer/src/settings/yml-parser.sh
+
 # if no dotfile-multiplex config file exists, copy the template file
 if [ ! -f $HOME/.dotfiles-multiplexer.yml ]; then
   cp $multiplexer/.dotfiles-multiplexer.yml.template $HOME/.dotfiles-multiplexer.yml
 fi
 
 # load in the config file
-. $multiplexer/src/settings/yml-parser.sh
 eval $(parse_yml $HOME/.dotfiles-multiplexer.yml "setup_")
 
 # check the setup variables
 . $multiplexer/src/settings/check-setup.sh
+
+# destroy the original build directory
+rm -r $multiplexer/build/ 2>/dev/null || true
+
+# check out the repo's if configured
+mkdir -p $multiplexer/build/repos/
+for alias in $setup_aliases; do
+  git clone $(aliasesToRepos $alias) $(aliasesToLocations $alias)
+done
+
 
 # if any original files exist then we will just move them rather than 
 # delete them
@@ -46,11 +60,8 @@ fi
 rm $HOME/bash.d 2>/dev/null || true
 
 # build the 'include' dotfiles
-rm -r $multiplexer/build/ 2>/dev/null || true
 mkdir -p $multiplexer/build/.ssh
 mkdir -p $multiplexer/build/bash.d
-. $multiplexer/src/helpers/alias-to-location.sh
-. $multiplexer/src/helpers/filter-excluded-aliases.sh
 . $multiplexer/src/templates/bash_aliases-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_bashaliases))
 . $multiplexer/src/templates/vimrc-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_vimrc))
 . $multiplexer/src/templates/gitconfig-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_gitconfig))
