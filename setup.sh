@@ -71,13 +71,13 @@ printf "\nBEGINNING FILE COMPOSITION\n\n"
 
 mkdir -p $build/.ssh
 mkdir -p $build/bash.d
-. $src/templates/bash_aliases-includes.sh $(filterExcludedAliases $setup_compose_bashaliases)
-. $src/templates/vimrc-includes.sh $(filterExcludedAliases $setup_compose_vimrc)
-. $src/templates/gitconfig-includes.sh $(filterExcludedAliases $setup_compose_gitconfig)
-. $src/templates/tmux.conf-includes.sh $(filterExcludedAliases $setup_compose_tmuxconf)
-. $src/templates/ssh-config-parts.sh $(filterExcludedAliases $setup_compose_sshconf)
-. $src/templates/bash.d-symlinks.sh $(filterExcludedAliases $setup_compose_bashdfolder)
-. $src/templates/profile.d-symlinks.sh $(filterExcludedAliases $setup_compose_profiledfolder)
+. $src/templates/bash_aliases-includes.sh $(filterExcludedAliases ${setup_compose_bashaliases:-$setup_aliases})
+. $src/templates/vimrc-includes.sh $(filterExcludedAliases ${setup_compose_vimrc:-$setup_aliases})
+. $src/templates/gitconfig-includes.sh $(filterExcludedAliases ${setup_compose_gitconfig:-$setup_aliases})
+. $src/templates/tmux.conf-includes.sh $(filterExcludedAliases ${setup_compose_tmuxconf:-$setup_aliases})
+. $src/templates/ssh-config-parts.sh $(filterExcludedAliases ${setup_compose_sshconf:-$setup_aliases})
+. $src/templates/bash.d-symlinks.sh $(filterExcludedAliases ${setup_compose_bashdfolder:-$setup_aliases})
+. $src/templates/profile.d-symlinks.sh $(filterExcludedAliases ${setup_compose_profiledfolder:-$setup_aliases})
 
 printf "\nFILE COMPOSITION COMPLETE\n\n"
 
