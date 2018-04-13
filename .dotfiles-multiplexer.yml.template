@@ -1,11 +1,3 @@
 aliases: "dots"
 dots:
   repo: "ENTER-THE-ADDRESS-OF-YOUR-REPOSITORY-HERE"
-compose:
-  sshconf: "dots"
-  gitconfig: "dots"
-  vimrc: "dots"
-  tmuxconf: "dots"
-  bashaliases: "dots"
-  bashdfolder: "dots"
-  profiledfolder: "dots"

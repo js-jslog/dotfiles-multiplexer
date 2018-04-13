@@ -6,7 +6,7 @@ function composeGitconfig() {
 
   echo "[include]" >> $build/.gitconfig
   for alias in $aliases; do
-    local dotsrepo=$(aliasesToLocations $alias)
+    local dotsrepo=$(aliasesToRepoLocations $alias)
     echo "  path = $dotsrepo/.gitconfig" >> $build/.gitconfig
   done
 

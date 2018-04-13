@@ -5,7 +5,7 @@ function composeVimconfig() {
   local alias
 
   for alias in $aliases; do
-    local dotsrepo=$(aliasesToLocations $alias)
+    local dotsrepo=$(aliasesToRepoLocations $alias)
     local cleanalias=${alias/-/}
     echo "let \$$cleanalias=expand(\"$dotsrepo/.vimrc\")" >> $build/.vimrc
     echo "if filereadable(\$$cleanalias)" >> $build/.vimrc

@@ -7,7 +7,7 @@ function buildSshconfig() {
   local alias
 
   for alias in $aliases; do
-    local dotsrepo=$(aliasesToLocations $alias)
+    local dotsrepo=$(aliasesToRepoLocations $alias)
     if [ -f $dotsrepo/.ssh/config ]; then
       echo "# originally included from $dotsrepo" >> $build/.ssh/config
       cat $dotsrepo/.ssh/config >> $build/.ssh/config

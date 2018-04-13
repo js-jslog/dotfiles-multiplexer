@@ -11,7 +11,7 @@ function buildSymlinks() {
   printf "\nBuilding profile.d symlinks from the following sources:\n"
 
   for alias in $aliases; do
-    local dotsrepo=$(aliasesToLocations $alias)
+    local dotsrepo=$(aliasesToRepoLocations $alias)
     if [ -d $dotsrepo/profile.d/ ]; then
       for profilepath in $(find $dotsrepo/profile.d/ \( -name '*.sh' \))
       do

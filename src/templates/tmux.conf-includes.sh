@@ -5,7 +5,7 @@ function composeTmuxconf() {
   local alias
 
   for alias in $aliases; do
-    local dotsrepo=$(aliasesToLocations $alias)
+    local dotsrepo=$(aliasesToRepoLocations $alias)
     echo "if-shell \"[ -f $dotsrepo/.tmux.conf ]\" 'source $dotsrepo/.tmux.conf'" >> $build/.tmux.conf
   done
 

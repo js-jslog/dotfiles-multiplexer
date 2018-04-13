@@ -7,7 +7,7 @@ function composeBashAliases() {
   # dotfiles-multiplexer aliases
   echo "alias dotsmp=\"cd $multiplexer\"" >> $build/.bash_aliases
   for alias in $aliases; do
-    local dotsrepo=$(aliasesToLocations $alias)
+    local dotsrepo=$(aliasesToRepoLocations $alias)
     echo "alias $alias=\"cd $dotsrepo\"" >> $build/.bash_aliases
     echo "if [ -f $dotsrepo/.bash_aliases ]; then" >> $build/.bash_aliases
     echo "  alias ${alias}modal=\"vim $dotsrepo/.bash_aliases && source ~/.bashrc\"" >> $build/.bash_aliases

@@ -8,9 +8,15 @@ function aliasesToRepos() {
   done
 }
 
-function aliasesToLocations() {
+function aliasesToRepoLocations() {
   for alias in $@; do
     echo "$build/repos/$alias/"
+  done
+}
+
+function aliasesToRepoHoldingLocations() {
+  for alias in $@; do
+    echo "$holding/repos/$alias/"
   done
 }
 

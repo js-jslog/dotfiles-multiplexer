@@ -5,6 +5,10 @@ set -e
 multiplexer="$PWD/${0%/*}"
 src="$multiplexer/src"
 build="$multiplexer/build"
+holding="$multiplexer/holding"
+
+# just in case the holding folder existed from a previous failed run
+sudo rm -r $holding 2>/dev/null || true
 
 # import dependencies
 . $src/helpers/config-helper.sh
@@ -21,15 +25,14 @@ eval $(parse_yml $HOME/.dotfiles-multiplexer.yml "setup_")
 # check the setup variables
 . $src/settings/check-setup.sh
 
-# destroy the original build directory
-sudo rm -r $build 2>/dev/null || true
-mkdir -p $build
-
 # check out the repo's if configured
 for alias in $setup_aliases; do
-  git clone $(aliasesToRepos $alias) $(aliasesToLocations $alias)
+  git clone $(aliasesToRepos $alias) $(aliasesToRepoHoldingLocations $alias)
 done
 
+# destroy the original build directory
+sudo rm -r $build 2>/dev/null || true
+mv $holding $build
 
 # if any original files exist then we will just move them rather than 
 # delete them

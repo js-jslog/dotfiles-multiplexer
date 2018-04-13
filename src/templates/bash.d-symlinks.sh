@@ -9,7 +9,7 @@ function buildSymlinks() {
   printf "\nBuilding bash.d symlinks from the following sources:\n"
 
   for alias in $aliases; do
-    local dotsrepo=$(aliasesToLocations $alias)
+    local dotsrepo=$(aliasesToRepoLocations $alias)
     # filling the bash.d folder with scripts to be run at shell initiation
     # bash files should contain exported environment variables and functions for interactive shells
     if [ -d $dotsrepo/bash.d/ ]; then
