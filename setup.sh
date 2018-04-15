@@ -6,9 +6,11 @@ multiplexer="$PWD/${0%/*}"
 src="$multiplexer/src"
 build="$multiplexer/build"
 holding="$multiplexer/holding"
+build_backup="$multiplexer/build_backup"
 
-# just in case the holding folder existed from a previous failed run
+# just in case some progress folders were left over from a previous failed run
 sudo rm -r $holding 2>/dev/null || true
+sudo rm -r $build_backup 2>/dev/null || true
 
 # import dependencies
 . $src/helpers/config-helper.sh
@@ -20,78 +22,46 @@ if [ ! -f $HOME/.dotfiles-multiplexer.yml ]; then
 fi
 
 # load in the config file
-eval $(parse_yml $HOME/.dotfiles-multiplexer.yml "setup_")
+eval $(parse_yml $HOME/.dotfiles-multiplexer.yml "config_")
 
-# check the setup variables
-. $src/settings/check-setup.sh
+# create the list of aliases which we actually care about
+filtered_aliases=$(filterExcludedAliases $config_aliases | tr '\n' ' ')
 
-# check out the repo's if configured
-for alias in $setup_aliases; do
-  git clone $(aliasesToRepos $alias) $(aliasesToRepoHoldingLocations $alias)
+# check the config variables
+. $src/settings/check-config.sh
+
+# register a variable to track how many repos were available after the previous iteration
+repos_cloned="0"
+
+# backup the build folder until we have completed the required clone attempts
+cp -r $build $build_backup 2>/dev/null || true
+
+# attempt to clone repos until they are all available or we stop making progress
+while [ $repos_cloned -lt $(countParams $filtered_aliases) ]; do
+  . src/helpers/runBuild.sh
+  if [ $repos_cloned = $(countClonedRepos) ]; then
+    echo "!!!FAILURE!!!"
+    echo "It appears that at least one of your configured repos is unaccessible"
+    echo "Please check that you have access to the configured repo from your location"
+    echo "-------"
+    echo "Repos required: $filtered_aliases"
+    echo "Repos cloned: $(ls $build/repos)"
+    echo ""
+    echo "REVERTING to previous config if available"
+    sudo rm -r $build 2>/dev/null || true
+    mv $build_backup $build 2>/dev/null || true
+    exit 1
+  fi
+  repos_cloned=$(countClonedRepos)
+  if [ $repos_cloned -lt $(countParams $filtered_aliases) ]; then
+    echo "Some repos were unclonable during this pass of the config - this may be resolved with another pass"
+    echo "-------"
+    echo "Repos required: $filtered_aliases"
+    echo "Repos cloned: $(ls $build/repos)"
+  fi
 done
 
-# destroy the original build directory
-sudo rm -r $build 2>/dev/null || true
-mv $holding $build
-
-# if any original files exist then we will just move them rather than 
-# delete them
-# if the file is a symlink then it will have in all likelyhood been 
-# provisioned by a version controlled dotfile manager so can just
-# be overwritten by stage 3 below
-if [ ! -L $HOME/.bashrc ] && [ -f $HOME/.bashrc ]; then
-  echo Backing up original .bashrc to $HOME/.bashrc.original
-  mv $HOME/.bashrc $HOME/.bashrc.original 2>/dev/null || true
-fi
-if [ ! -L $HOME/.bash_aliases ] && [ -f $HOME/.bash_aliases ]; then
-  echo Backing up original .bash_aliases to $HOME/.bash_aliases.original
-  mv $HOME/.bash_aliases $HOME/.bash_aliases.original 2>/dev/null || true
-fi
-if [ ! -L $HOME/.vimrc ] && [ -f $HOME/.vimrc ]; then
-  echo Backing up original .vimrc to $HOME/.vimrc.original
-  mv $HOME/.vimrc $HOME/.vimrc.original 2>/dev/null || true
-fi
-if [ ! -L $HOME/.tmux.conf ] && [ -f $HOME/.tmux.conf ]; then
-  echo Backing up original .tmux.conf to $HOME/.tmux.conf.original
-  mv $HOME/.tmux.conf $HOME/.tmux.conf.original 2>/dev/null || true
-fi
-if [ ! -L $HOME/.gitconfig ] && [ -f $HOME/.gitconfig ]; then
-  echo Backing up original .gitconfig to $HOME/.gitconfig.original
-  mv $HOME/.gitconfig $HOME/.gitconfig.original 2>/dev/null || true
-fi
-if [ ! -L $HOME/.ssh/config ] && [ -f $HOME/.ssh/config ]; then
-  echo Backing up original .ssh/config to $HOME/.ssh/config.original
-  # we need to provision the .ssh folder, just in case it doesn't exist yet
-  mkdir -p $HOME/.ssh
-  mv $HOME/.ssh/config $HOME/.ssh/config.original 2>/dev/null || true
-fi
-# overwriting sybolic links doesn't work if they are linked to directories apparently
-# need to remove it
-rm $HOME/bash.d 2>/dev/null || true
-
-# build the 'composition' dotfiles
-printf "\nBEGINNING FILE COMPOSITION\n\n"
-
-mkdir -p $build/.ssh
-mkdir -p $build/bash.d
-. $src/templates/bash_aliases-includes.sh $(filterExcludedAliases ${setup_compose_bashaliases:-$setup_aliases})
-. $src/templates/vimrc-includes.sh $(filterExcludedAliases ${setup_compose_vimrc:-$setup_aliases})
-. $src/templates/gitconfig-includes.sh $(filterExcludedAliases ${setup_compose_gitconfig:-$setup_aliases})
-. $src/templates/tmux.conf-includes.sh $(filterExcludedAliases ${setup_compose_tmuxconf:-$setup_aliases})
-. $src/templates/ssh-config-parts.sh $(filterExcludedAliases ${setup_compose_sshconf:-$setup_aliases})
-. $src/templates/bash.d-symlinks.sh $(filterExcludedAliases ${setup_compose_bashdfolder:-$setup_aliases})
-. $src/templates/profile.d-symlinks.sh $(filterExcludedAliases ${setup_compose_profiledfolder:-$setup_aliases})
-
-printf "\nFILE COMPOSITION COMPLETE\n\n"
-
-# overwrite existing symbolic links if they exist
-ln -sf $multiplexer/.bashrc $HOME/.bashrc
-ln -sf $build/.bash_aliases $HOME/.bash_aliases
-ln -sf $build/.vimrc $HOME/.vimrc
-ln -sf $build/.tmux.conf $HOME/.tmux.conf
-ln -sf $build/.gitconfig $HOME/.gitconfig
-ln -sf $build/.ssh/config $HOME/.ssh/config
-ln -s $build/bash.d $HOME/bash.d
+sudo rm -r $build_backup 2>/dev/null || true
 
 # do a scan of the profile.d folder for broken links (possibly from previous runs)
 . $src/settings/check-broken-symlinks.sh
