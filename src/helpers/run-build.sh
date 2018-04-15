@@ -50,6 +50,8 @@ function runBuild() {
 
   mkdir -p $build/.ssh
   mkdir -p $build/bash.d
+  cp $src/templates/.bashrc $build/.bashrc
+  echo "export dotfiles_multiplexer=$multiplexer" >> $build/.bashrc
   . $src/templates/bash_aliases-includes.sh $(filterExcludedAliases ${config_compose_bashaliases:-$config_aliases})
   . $src/templates/vimrc-includes.sh $(filterExcludedAliases ${config_compose_vimrc:-$config_aliases})
   . $src/templates/gitconfig-includes.sh $(filterExcludedAliases ${config_compose_gitconfig:-$config_aliases})
@@ -61,7 +63,7 @@ function runBuild() {
   printf "\nFILE COMPOSITION COMPLETE\n\n"
 
   # overwrite existing symbolic links if they exist
-  ln -sf $multiplexer/.bashrc $HOME/.bashrc
+  ln -sf $build/.bashrc $HOME/.bashrc
   ln -sf $build/.bash_aliases $HOME/.bash_aliases
   ln -sf $build/.vimrc $HOME/.vimrc
   ln -sf $build/.tmux.conf $HOME/.tmux.conf

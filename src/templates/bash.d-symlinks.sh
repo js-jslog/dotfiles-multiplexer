@@ -6,6 +6,11 @@ function buildSymlinks() {
   local bashpath
   local bashname
 
+  # adding the dotfiles-multiplexers own functions and vars
+  for file in $(ls $multiplexer/src/dotfiles/bash.d/); do
+    sudo ln -s $multiplexer/src/dotfiles/bash.d/$file $build/bash.d/dotfiles-multiplexer-$file
+  done
+
   printf "\nBuilding bash.d symlinks from the following sources:\n"
 
   for alias in $aliases; do
