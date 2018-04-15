@@ -1,21 +1,33 @@
 #! /bin/bash
 
-dotfolder_locations=$@
+# filling the profile.d folder with scripts to be run at login shell initiation
+# profile files should contain exported environment variables and functions for login shells
+function buildSymlinks() {
+  local aliases=$@
+  local alias
+  local profilepath
+  local profilename
+
+  printf "\nBuilding profile.d symlinks from the following sources:\n"
+
+  for alias in $aliases; do
+    local dotsrepo=$(aliasesToRepoLocations $alias)
+    if [ -d $dotsrepo/profile.d/ ]; then
+      for profilepath in $(find $dotsrepo/profile.d/ \( -name '*.sh' \))
+      do
+        profilename=$(basename "${profilepath}")
+        sudo ln -s $profilepath /etc/profile.d/$alias-$profilename
+
+        printf "  $profilepath\n"
+
+      done
+    fi
+  done
+}
 
 if [ ! $multiplexer ]; then
   echo "This script should only be run by the dotfile-multiplexer"
   exit 1
 fi
 
-# filling the profile.d folder with scripts to be run at login shell initiation
-# profile files should contain exported environment variables and functions for login shells
-for dotfolder_location in $dotfolder_locations; do
-  if [ -d $dotfolder_location/profile.d/ ]; then
-    for profilepath in $(find $dotfolder_location/profile.d/ \( -name '*.sh' \))
-    do
-      reponame=$(basename ${dotfolder_location})
-      profilename=$(basename "${profilepath}")
-      sudo ln -s $profilepath /etc/profile.d/$reponame-$profilename
-    done
-  fi
-done
+buildSymlinks $@

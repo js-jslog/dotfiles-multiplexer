@@ -1,22 +1,30 @@
 #! /bin/bash
 
-dotfolder_locations=$@
+function composeBashAliases() {
+  local aliases=$@
+  local alias
+
+  # including the dotfiles-multiplexer's own aliases
+  echo "if [ -f $multiplexer/src/dotfiles/.bash_aliases ]; then" >> $build/.bash_aliases
+  echo "  . $multiplexer/src/dotfiles/.bash_aliases" >> $build/.bash_aliases
+  echo "fi" >> $build/.bash_aliases
+
+  for alias in $aliases; do
+    local dotsrepo=$(aliasesToRepoLocations $alias)
+    echo "alias $alias=\"cd $dotsrepo\"" >> $build/.bash_aliases
+    echo "if [ -f $dotsrepo/.bash_aliases ]; then" >> $build/.bash_aliases
+    echo "  alias ${alias}modal=\"vim $dotsrepo/.bash_aliases && source ~/.bashrc\"" >> $build/.bash_aliases
+    echo "  . $dotsrepo/.bash_aliases" >> $build/.bash_aliases
+    echo "fi" >> $build/.bash_aliases
+  done
+
+  printf "\nComposing .bash_alises ...\n"
+  cat $build/.bash_aliases
+}
 
 if [ ! $multiplexer ]; then
   echo "This script should only be run by the dotfile-multiplexer"
   exit 1
 fi
 
-. $multiplexer/src/helpers/alias-to-location.sh
-
-# dotfiles-multiplexer aliases
-echo "alias dotsmp=\"cd $multiplexer\"" >> $multiplexer/build/.bash_aliases
-
-# aliases for imported dotfolders
-for dotfolder_location in $dotfolder_locations; do
-  echo "alias $(locationsToAliases $dotfolder_location)=\"cd $dotfolder_location\"" >> $multiplexer/build/.bash_aliases
-  echo "if [ -f $dotfolder_location/.bash_aliases ]; then" >> $multiplexer/build/.bash_aliases
-  echo "  alias $(locationsToAliases $dotfolder_location)modal=\"vim $dotfolder_location/.bash_aliases && source ~/.bashrc\"" >> $multiplexer/build/.bash_aliases
-  echo "  . $dotfolder_location/.bash_aliases" >> $multiplexer/build/.bash_aliases
-  echo "fi" >> $multiplexer/build/.bash_aliases
-done
+composeBashAliases $@

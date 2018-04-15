@@ -1,0 +1,11 @@
+aliases: "dotsme"
+dotsme:
+  location: "~/dotfiles-personal"
+dots:
+  sshconf: "dotsme"
+  gitconfig: "dotsme"
+  vimrc: "dotsme"
+  tmuxconf: "dotsme"
+  bashaliases: "dotsme"
+  bashdfolder: "dotsme"
+  profiledfolder: "dotsme"

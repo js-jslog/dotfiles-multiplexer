@@ -3,6 +3,20 @@
 set -e
 
 multiplexer="$PWD/${0%/*}"
+src="$multiplexer/src"
+build="$multiplexer/build"
+holding="$multiplexer/holding"
+build_backup="$multiplexer/build_backup"
+
+# just in case some progress folders were left over from a previous failed run
+sudo rm -r $holding 2>/dev/null || true
+sudo rm -r $build_backup 2>/dev/null || true
+
+# import dependencies
+. $src/helpers/yml-parser.sh
+. $src/helpers/config-helper.sh
+. $src/helpers/run-build.sh
+. $src/helpers/check-broken-symlinks.sh
 
 # if no dotfile-multiplex config file exists, copy the template file
 if [ ! -f $HOME/.dotfiles-multiplexer.yml ]; then
@@ -10,65 +24,48 @@ if [ ! -f $HOME/.dotfiles-multiplexer.yml ]; then
 fi
 
 # load in the config file
-. $multiplexer/src/settings/yml-parser.sh
-eval $(parse_yml $HOME/.dotfiles-multiplexer.yml "setup_")
+eval $(parse_yml $HOME/.dotfiles-multiplexer.yml "config_")
 
-# check the setup variables
-. $multiplexer/src/settings/check-setup.sh
+# create the list of aliases which we actually care about
+filtered_aliases=$(filterExcludedAliases $config_aliases | tr '\n' ' ')
 
-# if any original files exist then we will just move them rather than 
-# delete them
-# if the file is a symlink then it will have in all likelyhood been 
-# provisioned by a version controlled dotfile manager so can just
-# be overwritten by stage 3 below
-if [ ! -L $HOME/.bashrc ]; then
-  mv $HOME/.bashrc $HOME/.bashrc.original 2>/dev/null || true
-fi
-if [ ! -L $HOME/.bash_aliases ]; then
-  mv $HOME/.bash_aliases $HOME/.bash_aliases.original 2>/dev/null || true
-fi
-if [ ! -L $HOME/.vimrc ]; then
-  mv $HOME/.vimrc $HOME/.vimrc.original 2>/dev/null || true
-fi
-if [ ! -L $HOME/.tmux.conf ]; then
-  mv $HOME/.tmux.conf $HOME/.tmux.conf.original 2>/dev/null || true
-fi
-if [ ! -L $HOME/.gitconfig ]; then
-  mv $HOME/.gitconfig $HOME/.gitconfig.original 2>/dev/null || true
-fi
-if [ ! -L $HOME/.ssh/config ]; then
-  # we need to provision the .ssh folder, just in case it doesn't exist yet
-  mkdir -p $HOME/.ssh
-  mv $HOME/.ssh/config $HOME/.ssh/config.original 2>/dev/null || true
-fi
-# overwriting sybolic links doesn't work if they are linked to directories apparently
-# need to remove it
-rm $HOME/bash.d 2>/dev/null || true
+# check the config variables
+checkConfig
 
-# build the 'include' dotfiles
-rm -r $multiplexer/build/ 2>/dev/null || true
-mkdir -p $multiplexer/build/.ssh
-mkdir -p $multiplexer/build/bash.d
-. $multiplexer/src/helpers/alias-to-location.sh
-. $multiplexer/src/helpers/filter-excluded-aliases.sh
-. $multiplexer/src/templates/bash_aliases-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_bashaliases))
-. $multiplexer/src/templates/vimrc-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_vimrc))
-. $multiplexer/src/templates/gitconfig-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_gitconfig))
-. $multiplexer/src/templates/tmux.conf-includes.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_tmuxconf))
-. $multiplexer/src/templates/ssh-config-parts.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_sshconf))
-. $multiplexer/src/templates/bash.d-symlinks.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_bashdfolder))
-. $multiplexer/src/templates/profile.d-symlinks.sh $(aliasesToLocations $(filterExcludedAliases $setup_compose_profiledfolder))
+# register a variable to track how many repos were available after the previous iteration
+repos_cloned="0"
 
-# overwrite existing symbolic links if they exist
-ln -sf $multiplexer/.bashrc $HOME/.bashrc
-ln -sf $multiplexer/build/.bash_aliases $HOME/.bash_aliases
-ln -sf $multiplexer/build/.vimrc $HOME/.vimrc
-ln -sf $multiplexer/build/.tmux.conf $HOME/.tmux.conf
-ln -sf $multiplexer/build/.gitconfig $HOME/.gitconfig
-ln -sf $multiplexer/build/.ssh/config $HOME/.ssh/config
-ln -s $multiplexer/build/bash.d $HOME/bash.d
+# backup the build folder until we have completed the required clone attempts
+cp -r $build $build_backup 2>/dev/null || true
+
+# attempt to clone repos until they are all available or we stop making progress
+while [ $repos_cloned -lt $(countParams $filtered_aliases) ]; do
+  runBuild
+  if [ $repos_cloned = $(countClonedRepos) ]; then
+    echo "!!!FAILURE!!!"
+    echo "It appears that at least one of your configured repos is unaccessible"
+    echo "Please check that you have access to the configured repo from your location"
+    echo "-------"
+    echo "Repos required: $filtered_aliases"
+    echo "Repos cloned: $(ls $build/repos)"
+    echo ""
+    echo "REVERTING to previous config if available"
+    sudo rm -r $build 2>/dev/null || true
+    mv $build_backup $build 2>/dev/null || true
+    exit 1
+  fi
+  repos_cloned=$(countClonedRepos)
+  if [ $repos_cloned -lt $(countParams $filtered_aliases) ]; then
+    echo "Some repos were unclonable during this pass of the config - this may be resolved with another pass"
+    echo "-------"
+    echo "Repos required: $filtered_aliases"
+    echo "Repos cloned: $(ls $build/repos)"
+  fi
+done
+
+sudo rm -r $build_backup 2>/dev/null || true
 
 # do a scan of the profile.d folder for broken links (possibly from previous runs)
-. $multiplexer/src/settings/check-broken-symlinks.sh
+checkBrokenSymlinks
 
 echo "Complete"
