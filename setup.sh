@@ -13,8 +13,10 @@ sudo rm -r $holding 2>/dev/null || true
 sudo rm -r $build_backup 2>/dev/null || true
 
 # import dependencies
+. $src/helpers/yml-parser.sh
 . $src/helpers/config-helper.sh
-. $src/settings/yml-parser.sh
+. $src/helpers/run-build.sh
+. $src/helpers/check-broken-symlinks.sh
 
 # if no dotfile-multiplex config file exists, copy the template file
 if [ ! -f $HOME/.dotfiles-multiplexer.yml ]; then
@@ -28,7 +30,7 @@ eval $(parse_yml $HOME/.dotfiles-multiplexer.yml "config_")
 filtered_aliases=$(filterExcludedAliases $config_aliases | tr '\n' ' ')
 
 # check the config variables
-. $src/settings/check-config.sh
+checkConfig
 
 # register a variable to track how many repos were available after the previous iteration
 repos_cloned="0"
@@ -38,7 +40,7 @@ cp -r $build $build_backup 2>/dev/null || true
 
 # attempt to clone repos until they are all available or we stop making progress
 while [ $repos_cloned -lt $(countParams $filtered_aliases) ]; do
-  . src/helpers/runBuild.sh
+  runBuild
   if [ $repos_cloned = $(countClonedRepos) ]; then
     echo "!!!FAILURE!!!"
     echo "It appears that at least one of your configured repos is unaccessible"
@@ -64,6 +66,6 @@ done
 sudo rm -r $build_backup 2>/dev/null || true
 
 # do a scan of the profile.d folder for broken links (possibly from previous runs)
-. $src/settings/check-broken-symlinks.sh
+checkBrokenSymlinks
 
 echo "Complete"
