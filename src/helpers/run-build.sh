@@ -68,6 +68,6 @@ function runBuild() {
   ln -sf $build/.vimrc $HOME/.vimrc
   ln -sf $build/.tmux.conf $HOME/.tmux.conf
   ln -sf $build/.gitconfig $HOME/.gitconfig
-  ln -sf $build/.ssh/config $HOME/.ssh/config
+  sudo ln -sf $build/.ssh/config $HOME/.ssh/config
   ln -s $build/bash.d $HOME/bash.d
 }
