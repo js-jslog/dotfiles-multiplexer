@@ -1,5 +1,5 @@
 # Dotfiles-multiplexer
-A tool for combining repositories of dotfiles and shell scripts
+A tool for combining repositories of dotfiles and shell scripts.
 
 ## Motivation
 The aliases, functions and application config which I *need* vary depending on my situation, while others which I *want* may be consistent across these situations.
