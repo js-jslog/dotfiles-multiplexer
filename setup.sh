@@ -8,15 +8,19 @@ build="$multiplexer/build"
 holding="$multiplexer/holding"
 build_backup="$multiplexer/build_backup"
 
-# just in case some progress folders were left over from a previous failed run
-sudo rm -r $holding 2>/dev/null || true
-sudo rm -r $build_backup 2>/dev/null || true
-
 # import dependencies
 . $src/helpers/yml-parser.sh
 . $src/helpers/config-helper.sh
 . $src/helpers/run-build.sh
 . $src/helpers/check-broken-symlinks.sh
+. $src/helpers/housekeeping.sh
+
+for sig in INT TERM EXIT; do
+    trap "runBackout; [[ $sig == EXIT ]] || kill -$sig $$" $sig
+done
+
+# just in case some progress folders were left over from a previous failed run
+runCleanup
 
 # if no dotfile-multiplex config file exists, copy the template file
 if [ ! -f $HOME/.dotfiles-multiplexer.yml ]; then
@@ -35,7 +39,7 @@ checkConfig
 # register a variable to track how many repos were available after the previous iteration
 repos_cloned="0"
 
-# backup the build folder until we have completed the required clone attempts
+# backup the build folder until we have completed the complete rebuilding
 cp -r $build $build_backup 2>/dev/null || true
 
 # attempt to clone repos until they are all available or we stop making progress
@@ -63,7 +67,7 @@ while [ $repos_cloned -lt $(countParams $filtered_aliases) ]; do
   fi
 done
 
-sudo rm -r $build_backup 2>/dev/null || true
+runCleanup
 
 # do a scan of the profile.d folder for broken links (possibly from previous runs)
 checkBrokenSymlinks
