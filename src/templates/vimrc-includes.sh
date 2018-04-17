@@ -14,7 +14,11 @@ function composeVimconfig() {
   done
 
   printf "\nComposing .vimrc ...\n"
-  cat $build/.vimrc
+  if [ -f $build/.vimrc ]; then
+    cat $build/.vimrc
+  else
+    echo "no .vimrc generated"
+  fi
 }
 
 if [ ! $multiplexer ]; then

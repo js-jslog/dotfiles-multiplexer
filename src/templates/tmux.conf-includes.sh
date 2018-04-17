@@ -10,7 +10,11 @@ function composeTmuxconf() {
   done
 
   printf "\nComposing .tmux.conf ...\n"
-  cat $build/.tmux.conf
+  if [ -f $build/.tmux.conf ]; then
+    cat $build/.tmux.conf
+  else
+    echo "no .tmux.conf generated"
+  fi
 }
 
 if [ ! $multiplexer ]; then

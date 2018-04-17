@@ -11,7 +11,11 @@ function composeGitconfig() {
   done
 
   printf "\nComposing .gitconfig ...\n"
-  cat $build/.gitconfig
+  if [ -f $build/.gitconfig ]; then
+    cat $build/.gitconfig
+  else
+    echo "no .gitconfig generated"
+  fi
 }
 
 if [ ! $multiplexer ]; then

@@ -19,8 +19,11 @@ function composeBashAliases() {
   done
 
   printf "\nComposing .bash_alises ...\n"
-  cat $build/.bash_aliases
-}
+  if [ -f $build/.bash_aliases ]; then
+    cat $build/.bash_aliases
+  else
+    echo "no .bash_aliases generated"
+  }
 
 if [ ! $multiplexer ]; then
   echo "This script should only be run by the dotfile-multiplexer"

@@ -16,9 +16,13 @@ function buildSshconfig() {
   done
 
   printf "\nComposing .ssh/config ...\n"
-  cat $build/.ssh/config
-  sudo chown $USER:root $build/.ssh/config
-  sudo chmod 600 $build/.ssh/config
+  if [ -f $build/.ssh/config ]; then
+    cat $build/.ssh/config
+    sudo chown $USER:root $build/.ssh/config
+    sudo chmod 600 $build/.ssh/config
+  else
+    echo "no .ssh/config generated"
+  fi
 }
 
 if [ ! $multiplexer ]; then
