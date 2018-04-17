@@ -23,7 +23,8 @@ function composeBashAliases() {
     cat $build/.bash_aliases
   else
     echo "no .bash_aliases generated"
-  }
+  fi
+}
 
 if [ ! $multiplexer ]; then
   echo "This script should only be run by the dotfile-multiplexer"
