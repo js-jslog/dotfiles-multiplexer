@@ -71,3 +71,20 @@ function runBuild() {
   sudo ln -sf $build/.ssh/config $HOME/.ssh/config
   ln -s $build/bash.d $HOME/bash.d
 }
+
+function runProvisioning() {
+
+  echo "Provisioning enabled - searching projects for provisioning scripts"
+
+  local reversed_filtered_aliases=$(echo $filtered_aliases | awk '{ for (i=NF; i>1; i--) printf("%s ",$i); print $1; }')
+
+  for alias in $reversed_filtered_aliases; do
+    local provision_script=$(aliasesToRepoLocations $alias)/provision/run.sh
+    if [ -f $provision_script ]; then
+      echo "Running provision script for $alias"
+      . $provision_script
+    fi
+  done
+  printf "\nProvisioning complete\n\n"
+  cd $multiplexer
+}
