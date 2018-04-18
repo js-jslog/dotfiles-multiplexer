@@ -73,11 +73,18 @@ function runBuild() {
 }
 
 function runProvisioning() {
-  for alias in $filtered_aliases; do
-    local provision_script=$(aliasesToRepoLocations $alias)/provision.sh
+
+  echo "Provisioning enabled - searching projects for provisioning scripts"
+
+  local reversed_filtered_aliases=$(echo $filtered_aliases | awk '{ for (i=NF; i>1; i--) printf("%s ",$i); print $1; }')
+
+  for alias in $reversed_filtered_aliases; do
+    local provision_script=$(aliasesToRepoLocations $alias)/provision/run.sh
     if [ -f $provision_script ]; then
+      echo "Running provision script for $alias"
       . $provision_script
     fi
   done
+  printf "\nProvisioning complete\n\n"
   cd $multiplexer
 }

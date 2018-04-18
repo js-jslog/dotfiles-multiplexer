@@ -80,4 +80,5 @@ runCleanup
 # do a scan of the profile.d folder for broken links (possibly from previous runs)
 checkBrokenSymlinks
 
-echo "Complete"
+echo "Setup complete"
+echo "NOTE: Most modifications to your configurations will only require a `source ~/.bashrc` at most - see documentation for details (or just rerun setup.sh if you are unsure and can't be bothered to read)"
