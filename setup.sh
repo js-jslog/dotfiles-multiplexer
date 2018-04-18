@@ -7,13 +7,17 @@ src="$multiplexer/src"
 build="$multiplexer/build"
 holding="$multiplexer/holding"
 build_backup="$multiplexer/build_backup"
+provision=false
 
 # import dependencies
+. $src/helpers/cli-parser.sh
 . $src/helpers/yml-parser.sh
 . $src/helpers/config-helper.sh
-. $src/helpers/run-build.sh
+. $src/helpers/build.sh
 . $src/helpers/check-broken-symlinks.sh
 . $src/helpers/housekeeping.sh
+
+parseCliParams $@
 
 for sig in INT TERM EXIT; do
     trap "runBackout; [[ $sig == EXIT ]] || kill -$sig $$" $sig
@@ -66,6 +70,10 @@ while [ $repos_cloned -lt $(countParams $filtered_aliases) ]; do
     echo "Repos cloned: $(ls $build/repos)"
   fi
 done
+
+if [ $provision = true ]; then
+  runProvisioning
+fi
 
 runCleanup
 

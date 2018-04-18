@@ -71,3 +71,13 @@ function runBuild() {
   sudo ln -sf $build/.ssh/config $HOME/.ssh/config
   ln -s $build/bash.d $HOME/bash.d
 }
+
+function runProvisioning() {
+  for alias in $filtered_aliases; do
+    local provision_script=$(aliasesToRepoLocations $alias)/provision.sh
+    if [ -f $provision_script ]; then
+      . $provision_script
+    fi
+  done
+  cd $multiplexer
+}
