@@ -15,10 +15,6 @@ function runBuild() {
   # if the file is a symlink then it will have in all likelyhood been 
   # provisioned by a version controlled dotfile manager so can just
   # be overwritten by stage 3 below
-  if [ ! -L $HOME/.bashrc ] && [ -f $HOME/.bashrc ]; then
-    echo Backing up original .bashrc to $HOME/.bashrc.original
-    mv $HOME/.bashrc $HOME/.bashrc.original 2>/dev/null || true
-  fi
   if [ ! -L $HOME/.bash_aliases ] && [ -f $HOME/.bash_aliases ]; then
     echo Backing up original .bash_aliases to $HOME/.bash_aliases.original
     mv $HOME/.bash_aliases $HOME/.bash_aliases.original 2>/dev/null || true
@@ -52,6 +48,7 @@ function runBuild() {
   mkdir -p $build/bash.d
   cp $src/templates/.bashrc $build/.bashrc
   echo "export dotfiles_multiplexer=$multiplexer" >> $build/.bashrc
+  . $src/templates/bashrc-build.sh
   . $src/templates/bash_aliases-includes.sh $(filterExcludedAliases ${config_compose_bashaliases:-$config_aliases})
   . $src/templates/vimrc-includes.sh $(filterExcludedAliases ${config_compose_vimrc:-$config_aliases})
   . $src/templates/gitconfig-includes.sh $(filterExcludedAliases ${config_compose_gitconfig:-$config_aliases})
