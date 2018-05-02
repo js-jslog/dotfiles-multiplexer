@@ -7,6 +7,7 @@ src="$multiplexer/src"
 build="$multiplexer/build"
 holding="$multiplexer/holding"
 build_backup="$multiplexer/build_backup"
+bashrc_persist_file_name=".bashrc.persist-DO-NOT-DELETE"
 provision=false
 
 # import dependencies

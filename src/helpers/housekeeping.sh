@@ -6,6 +6,9 @@ function runBackout() {
     sudo rm -r $build 2>/dev/null || true
     mv $build_backup $build
   fi
+  if [ -f $build/$bashrc_persist_file_name ]; then
+    mv $build/$bashrc_persist_file_name $HOME/$bashrc_persist_file_name
+  fi
   runCleanup
 }
 
