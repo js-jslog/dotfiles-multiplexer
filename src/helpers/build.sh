@@ -46,7 +46,6 @@ function runBuild() {
 
   mkdir -p $build/.ssh
   mkdir -p $build/bash.d
-  echo "export dotfiles_multiplexer=$multiplexer" >> $build/.bashrc
   . $src/templates/bashrc-build.sh
   . $src/templates/bash_aliases-includes.sh $(filterExcludedAliases ${config_compose_bashaliases:-$config_aliases})
   . $src/templates/vimrc-includes.sh $(filterExcludedAliases ${config_compose_vimrc:-$config_aliases})

@@ -29,9 +29,10 @@ function sourceBashrc() {
   cp $HOME/$bashrc_persist_file_name $build/.bashrc
 }
 
-function buildSymlinks() {
+function augmentBashrc() {
   echo "" >> $build/.bashrc
   echo "############# END UNMANAGED ADDITIONS                  #############" >> $build/.bashrc
+  echo "export dotfiles_multiplexer=$multiplexer" >> $build/.bashrc
   echo "############# BASH.D INCLUDE                           #############" >> $build/.bashrc
   echo "# runs a collection of bash scripts. this is analogeous to the " >> $build/.bashrc
   echo "# /etc/profile.d folder but for interactive bash shells rather " >> $build/.bashrc
@@ -51,7 +52,7 @@ function buildSymlinks() {
 function buildBashrc() {
   sourceBashrc
   persistUnmanagedAdditions
-  buildSymlinks
+  augmentBashrc
 }
 
 if [ ! $multiplexer ]; then
